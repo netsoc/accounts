@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Account</title>
+</head>
+
+<body>
+    <div id='login'>
+        <div v-if="waitingToLogin">
+            <div>
+                Login
+            </div>
+            <div>
+                Username:
+            </div>
+            <input type="text" v-model="username"/>
+            <div>
+                Password:
+            </div>
+            <input type="password" v-model="password" />
+
+            <button v-on:click="login">
+                Login
+            </button>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script>
+        // State stuff
+
+
+        // Vue stuff
+        let loginElem = new Vue({
+            el: '#login',
+            data: {
+                waitingToLogin: true,
+                username: '',
+                password: ''
+            },
+            methods: {
+                login: function () {
+                    console.warn({username: this.username, pwd: this.password});
+                }
+            }
+        });
+
+
+    </script>
+</body>
+
+</html>
