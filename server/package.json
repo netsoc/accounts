@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "nodemon index.js",
-    "build": "npx @openapitools/openapi-generator-cli generate -i ./../iam/static/api.yaml -g javascript -o ./../client/api/"
+    "build": "./../build.sh"
   },
   "author": "darts",
   "license": "ISC",
