@@ -5,6 +5,10 @@ npx @openapitools/openapi-generator-cli generate -i ./../iam/static/api.yaml -g 
 cd ../client/api/
 npm install
 npm link
-mkdir -p ../javascript/api
-cd ../javascript/api
+cd ../../server
+npm link ../client/api/
+cd ../client/api/
 npm run build
+cd ../../server
+npm install -g browserify
+browserify main.js > bundle.js
