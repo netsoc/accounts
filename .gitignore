@@ -1,7 +1,8 @@
 .DS_Store
 node_modules
 /dist
-
+/src/iam_dist
+/iam
 
 # local env files
 .env.local

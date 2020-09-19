@@ -1,22 +1,24 @@
 <template>
   <div id="login_container">
     <div>
-      <div class>Username:</div>
+      <div> Username: </div>
       <input v-model="username" type="text" />
-      <span v-if="no_username">Please enter your username</span>
-      <div>Password:</div>
+      <div> Email: </div>
+      <input v-model="email" type="text" />
+      <div> Repeat Email: </div>
+      <input v-model="repeat_email" type="text" />
+      <span v-if="email != repeat_email">Emails do not match</span>
+      <div> Password: </div>
       <input v-model="password" type="password" />
-      <span v-if="no_password">Please enter a password</span>
+      <div> Repeat Password: </div>
+      <input v-model="repeat_password" type="password" />
+      <span v-if="password != repeat_password">Passwords do not match</span>
       <div v-if="response_pending" class="bouncing-loader">
         <div></div>
         <div></div>
         <div></div>
       </div>
-      <button v-else v-on:click="login">Login</button>
-      <div>
-        Not an existing user?
-        <span v-on:click="existing_user = false">Create an account.</span>
-      </div>
+      <button v-else v-on:click="create_account">Create Account</button>
     </div>
   </div>
 </template>
@@ -30,9 +32,10 @@ export default {
   data() {
     return {
       username: "",
+      email: "",
+      repeat_email: "",
       password: "",
-      no_username: false,
-      no_password: false,
+      repeat_password: "",
       response_pending: false,
     };
   },
@@ -62,8 +65,8 @@ export default {
       console.log({ username: username, password: password });
     },
     create_account() {
-      alert("Implement this");
-    },
+      alert('Implement this');
+    }
   },
 };
 </script>

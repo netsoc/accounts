@@ -1,23 +1,6 @@
 <template>
-  <div id="login_container">
-    <div>
-      <div class>Username:</div>
-      <input v-model="username" type="text" />
-      <span v-if="no_username">Please enter your username</span>
-      <div>Password:</div>
-      <input v-model="password" type="password" />
-      <span v-if="no_password">Please enter a password</span>
-      <div v-if="response_pending" class="bouncing-loader">
-        <div></div>
-        <div></div>
-        <div></div>
-      </div>
-      <button v-else v-on:click="login">Login</button>
-      <div>
-        Not an existing user?
-        <span v-on:click="existing_user = false">Create an account.</span>
-      </div>
-    </div>
+  <div id="account_container">
+
   </div>
 </template>
 
@@ -29,11 +12,6 @@ export default {
   name: "LoginPrompt",
   data() {
     return {
-      username: "",
-      password: "",
-      no_username: false,
-      no_password: false,
-      response_pending: false,
     };
   },
   methods: {
@@ -60,10 +38,7 @@ export default {
       this.response_pending = true;
 
       console.log({ username: username, password: password });
-    },
-    create_account() {
-      alert("Implement this");
-    },
+    }
   },
 };
 </script>
