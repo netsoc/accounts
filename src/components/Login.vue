@@ -15,7 +15,7 @@
       <button v-else v-on:click="login">Login</button>
       <div>
         Not an existing user?
-        <span v-on:click="existing_user = false">Create an account.</span>
+        <router-link to='signup'> Create an account.</router-link>
       </div>
     </div>
   </div>
@@ -23,7 +23,7 @@
 
 <script>
 const netsocIam = require("@netsoc/iam");
-const api = new netsocIam.UsersApi();
+let api = new netsocIam.UsersApi();
 
 export default {
   name: "LoginPrompt",
@@ -60,9 +60,6 @@ export default {
       this.response_pending = true;
 
       console.log({ username: username, password: password });
-    },
-    create_account() {
-      alert("Implement this");
     },
   },
 };
