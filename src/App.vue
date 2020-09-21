@@ -1,9 +1,27 @@
 <template>
   <div id="app">
     <img src="@/assets/netsoc-logo.svg" alt="Netsoc Logo" style="max-height: 5rem">
-    <router-view/>
+    <router-view v-on:successfulLogin="login" v-bind:jwt="jwt"/>
   </div>
 </template>
+
+<script>
+export default {
+  name: "Container",
+  data() {
+    return {
+      jwt: ""
+    }
+  },
+  methods: {
+    login: function (data) {
+      console.log(data);
+      this.jwt = data.data.token;
+      this.$router.push({ name: "Account" })
+    },
+  },
+}
+</script>
 
 <style>
 #app {

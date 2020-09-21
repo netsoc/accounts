@@ -15,16 +15,13 @@
       <button v-else v-on:click="login">Login</button>
       <div>
         Not an existing user?
-        <router-link to='signup'> Create an account.</router-link>
+        <router-link to="signup">Create an account.</router-link>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-const netsocIam = require("@netsoc/iam");
-let api = new netsocIam.UsersApi();
-
 export default {
   name: "LoginPrompt",
   data() {
@@ -45,21 +42,28 @@ export default {
 
       if (this.no_username || this.no_password) return;
 
-      let callbackFn = function (error, data, response) {
-        console.log({ error: error, data: data, response: response });
-        this.response_pending = false;
+      const axios = require("axios").default;
 
-        let DEV_login = true;
+    axios.post(`http://localhost:8080/v1/users/${username}/login`,{
+      password: password
+    }).then(data => {
+      this.$emit("successfulLogin", data);
+    }).catch(response => console.log(response))
 
-        if (DEV_login || data) {
-          this.$emit("successfulLogin", data);
-        }
-      };
 
-      api.login(username, password, callbackFn.bind(this));
+      // let callbackFn = function (error, data, response) {
+      //   console.log({ error: error, data: data, response: response });
+      //   this.response_pending = false;
+
+      //   if (data) {
+      //     this.$emit("successfulLogin", data);
+      //   }
+      // };
+
+      // api.login(username, password, callbackFn.bind(this));
       this.response_pending = true;
 
-      console.log({ username: username, password: password });
+      // console.log({ username: username, password: password });
     },
   },
 };

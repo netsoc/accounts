@@ -1,44 +1,39 @@
 <template>
   <div id="account_container">
-
+    Account page to be implemented
+    {{jwt}}
   </div>
 </template>
 
 <script>
-const netsocIam = require("@netsoc/iam");
-const api = new netsocIam.UsersApi();
-
+const axios = require("axios").default;
 export default {
-  name: "LoginPrompt",
+  name: "Account",
+  props: ["jwt"],
   data() {
-    return {
-    };
+    return {};
   },
   methods: {
-    login() {
-      let username = this.username;
-      let password = this.password;
-      this.no_username = username.length < 1;
-      this.no_password = password.length < 1;
-
-      if (this.no_username || this.no_password) return;
-
-      let callbackFn = function (error, data, response) {
-        console.log({ error: error, data: data, response: response });
-        this.response_pending = false;
-
-        let DEV_login = true;
-
-        if (DEV_login || data) {
-          this.$emit("successfulLogin", data);
-        }
-      };
-
-      api.login(username, password, callbackFn.bind(this));
-      this.response_pending = true;
-
-      console.log({ username: username, password: password });
+    getUserData() {
+        let token = this.jwt;
+      axios
+        .get(
+          "http://localhost:8080/v1/users/self",
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        )
+        .then((response) => console.log(response))
+        .catch((response) => console.error(response));
+    },
+  },
+  beforeMount() {
+    if (this.jwt.length < 1) {
+      this.$router.push({ name: "Login" });
     }
+    this.getUserData();
   },
 };
 </script>
