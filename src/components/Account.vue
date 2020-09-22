@@ -34,6 +34,7 @@
 <script>
 const axios = require("axios").default;
 import * as userFn from "./utils/login";
+
 export default {
   name: "Account",
   props: ["jwt"],
@@ -91,8 +92,12 @@ export default {
   methods: {
     getUserData() {
       let token = this.jwt;
+
+      // eslint-disable-next-line
+      const URL = IAM_GET_USER_DATA_URL;
+
       axios
-        .get("http://localhost:8080/v1/users/self", {
+        .get(URL, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -107,8 +112,12 @@ export default {
     updateUserData() {
       let token = this.jwt;
       let updatedObj = this.getUpdatedData();
+
+      // eslint-disable-next-line
+      const URL = IAM_UPDATE_USER_DATA_URL;
+
       axios
-        .patch("http://localhost:8080/v1/users/self", updatedObj, {
+        .patch(URL, updatedObj, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -132,8 +141,8 @@ export default {
       return newUserObj;
     },
     toPayments() {
-        this.$emit("userID", this.user.username);
-        this.$router.push({ name: "Renew" });
+      this.$emit("userID", this.user.username);
+      this.$router.push({ name: "Renew" });
     },
   },
   beforeMount() {

@@ -42,28 +42,20 @@ export default {
 
       if (this.no_username || this.no_password) return;
 
+      // eslint-disable-next-line
+      const URL = IAM_LOGIN_URL;
+
       const axios = require("axios").default;
+      axios
+        .post(URL.replace("${username}", username), {
+          password: password,
+        })
+        .then((data) => {
+          this.$emit("tokenUpdate", data.data.token);
+        })
+        .catch((response) => console.log(response));
 
-    axios.post(`http://localhost:8080/v1/users/${username}/login`,{
-      password: password
-    }).then(data => {
-      this.$emit("tokenUpdate", data.data.token);
-    }).catch(response => console.log(response))
-
-
-      // let callbackFn = function (error, data, response) {
-      //   console.log({ error: error, data: data, response: response });
-      //   this.response_pending = false;
-
-      //   if (data) {
-      //     this.$emit("successfulLogin", data);
-      //   }
-      // };
-
-      // api.login(username, password, callbackFn.bind(this));
       this.response_pending = true;
-
-      // console.log({ username: username, password: password });
     },
   },
 };

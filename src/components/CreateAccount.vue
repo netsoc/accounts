@@ -34,9 +34,6 @@
 </template>
 
 <script>
-// const netsocIam = require("@netsoc/iam");
-// const api = new netsocIam.UsersApi();
-
 export default {
   name: "LoginPrompt",
   data() {
@@ -54,16 +51,19 @@ export default {
   },
   methods: {
     create_account() {
-        const axios = require("axios").default;
-        let username = this.username;
-        let email = this.email;
-        let password = this.password;
-        let firstname = this.firstname;
-        let lastname = this.lastname;
+      const axios = require("axios").default;
+      let username = this.username;
+      let email = this.email;
+      let password = this.password;
+      let firstname = this.firstname;
+      let lastname = this.lastname;
+
+      // eslint-disable-next-line
+      const URL = IAM_CREATE_ACCOUNT_URL;
 
       axios
         .post(
-          "http://localhost:8080/v1/users",
+          URL,
           {
             username: username,
             email: email,

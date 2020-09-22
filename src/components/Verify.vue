@@ -16,11 +16,14 @@ export default {
   methods: {
     verify() {
       let token = this.$route.query.token;
-      alert(token);
+
+      // eslint-disable-next-line
+      const URL = IAM_VERIFY_URL;
+
       const axios = require("axios").default;
       axios
         .patch(
-          "http://localhost:8080/v1/users/self/login",
+          URL,
           {},
           {
             headers: {
@@ -33,13 +36,14 @@ export default {
           switch (response.status) {
             case 204:
               this.response_message = "Email Confirmed, Redirecting...";
-              setTimeout(() => {this.$router.push({ name: "Login" })}, 1500)
+              setTimeout(() => {
+                this.$router.push({ name: "Login" });
+              }, 1500);
               break;
 
             default:
               break;
           }
-
         })
         .catch((response) => console.error(response));
     },

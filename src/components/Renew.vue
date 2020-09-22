@@ -20,15 +20,16 @@ export default {
   },
   methods: {
     createSession() {
-        if(this.uid.length < 1)
-            this.$router.push({ name: "Login" })
-        const STRIPE_PUBLIC_KEY = ''
+      if (this.uid.length < 1) this.$router.push({ name: "Login" });
+
       // eslint-disable-next-line
       let stripe = Stripe(STRIPE_PUBLIC_KEY);
 
-      let uid = this.uid;
+      // eslint-disable-next-line
+      const URL = PAYMENT_CREATE_SESSION_URL;
 
-      fetch("http://localhost:4242/create-session", {
+      let uid = this.uid;
+      fetch(URL, {
         method: "POST",
         headers: {
           "Access-Control-Allow-Headers": "Content-Type",
