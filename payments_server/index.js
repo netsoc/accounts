@@ -6,14 +6,15 @@ const express = require('express');
 const cors = require('cors');
 const axios = require("axios").default;
 const bodyParser = require('body-parser')
+const fs = require('fs');
+let CONFIG = JSON.parse(fs.readFileSync('./config.json'));
+
 var corsOptions = {
-    origin: 'http://localhost:3000',
+    origin: CONFIG.ACCOUNTS_BASE_URL,
     optionsSuccessStatus: 200
 }
 const app = express();
 app.use(express.static('.'));
-const YOUR_DOMAIN = 'http://localhost:4242';
-const LOGIN_PAGE_URL = 'http://localhost:3000'
 
 app.options('/create-session', cors(corsOptions))
 
@@ -35,8 +36,8 @@ app.post('/create-session', bodyParser.json(), cors(corsOptions), async (req, re
         ],
         client_reference_id: req.body.uid,
         mode: 'payment',
-        success_url: `${LOGIN_PAGE_URL}/success`,
-        cancel_url: LOGIN_PAGE_URL,
+        success_url: `${CONFIG.ACCOUNTS_BASE_URL}${CONFIG.SUCCESS_URL}`,
+        cancel_url: `${CONFIG.ACCOUNTS_BASE_URL}${CONFIG.CANCEL_URL}`,
     });
     res.json({ id: session.id });
 });
@@ -64,4 +65,4 @@ app.post('/webhook', bodyParser.raw({type: 'application/json'}), (request, respo
     response.status(200);
   });
 
-app.listen(4242, () => console.log('Running on port 4242'));
+app.listen(CONFIG.SERVER_PORT, () => console.log(`Running on port ${CONFIG.SERVER_PORT}`));
