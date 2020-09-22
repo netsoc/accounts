@@ -62,4 +62,8 @@ app.post('/webhook', bodyParser.raw({type: 'application/json'}), (request, respo
     response.status(200);
   });
 
-app.listen(env.SERVER_PORT, () => console.log(`Running on port ${env.SERVER_PORT}`));
+const server = app.listen(env.SERVER_PORT, () => console.log(`Running on port ${env.SERVER_PORT}`));
+
+const shutdown = () => server.close();
+process.on('SIGINT', shutdown);
+process.on('SIGTERM', shutdown);
