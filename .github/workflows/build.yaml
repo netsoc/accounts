@@ -55,6 +55,7 @@ jobs:
           cache-to: type=local,dest=/tmp/.buildx-cache
           load: true
           context: payments_server
+          file: payments_server/Dockerfile
           tags: |
             ${{ env.REPO }}/backend:${{ github.sha }}
             ${{ env.REPO }}/backend:latest
