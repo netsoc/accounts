@@ -7,10 +7,9 @@ const cors = require('cors');
 const axios = require("axios").default;
 const bodyParser = require('body-parser')
 const fs = require('fs');
-let CONFIG = JSON.parse(fs.readFileSync('./config.json'));
-
+const env = process.env;
 var corsOptions = {
-    origin: CONFIG.ACCOUNTS_BASE_URL,
+    origin: env.ACCOUNTS_BASE_URL,
     optionsSuccessStatus: 200
 }
 const app = express();
@@ -36,8 +35,8 @@ app.post('/create-session', bodyParser.json(), cors(corsOptions), async (req, re
         ],
         client_reference_id: req.body.uid,
         mode: 'payment',
-        success_url: `${CONFIG.ACCOUNTS_BASE_URL}${CONFIG.SUCCESS_URL}`,
-        cancel_url: `${CONFIG.ACCOUNTS_BASE_URL}${CONFIG.CANCEL_URL}`,
+        success_url: `${env.ACCOUNTS_BASE_URL}${env.SUCCESS_URL}`,
+        cancel_url: `${env.ACCOUNTS_BASE_URL}${env.CANCEL_URL}`,
     });
     res.json({ id: session.id });
 });
@@ -65,4 +64,4 @@ app.post('/webhook', bodyParser.raw({type: 'application/json'}), (request, respo
     response.status(200);
   });
 
-app.listen(CONFIG.SERVER_PORT, () => console.log(`Running on port ${CONFIG.SERVER_PORT}`));
+app.listen(env.SERVER_PORT, () => console.log(`Running on port ${env.SERVER_PORT}`));
