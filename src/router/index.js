@@ -24,6 +24,11 @@ const routes = [
     path: '/account',
     name: 'Account',
     component: () => import('@/components/Account.vue')
+  },
+  {
+    path: '/renew',
+    name: 'Renew',
+    component: () => import('@/components/Renew.vue')
   }
 ]
 

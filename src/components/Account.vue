@@ -23,6 +23,11 @@
       <input v-if="edit_name" v-model="new_last_name" placeholder="Your last name" />
       <button v-on:click="updateUserData" :disabled="!modifyEnabled">Update Account</button>
     </div>
+    <div>
+      <span>Last Renewed:</span>
+      <span>{{renewedDateString}}</span>
+      <button v-if="isExpired" v-on:click="toPayments">Renew Account</button>
+    </div>
   </div>
 </template>
 
@@ -72,6 +77,16 @@ export default {
         return false;
       return true;
     },
+    renewedDateString: function () {
+      let renewedDate = new Date(this.user.renewed);
+      if (renewedDate.getTime() === new Date("0001-01-01T00:00:00Z").getTime())
+        return "Never";
+      return renewedDate.getTime();
+    },
+    isExpired: function () {
+      let renewedDate = new Date(this.user.renewed);
+      return renewedDate.getTime() <= new Date().getTime();
+    },
   },
   methods: {
     getUserData() {
@@ -91,20 +106,18 @@ export default {
     updateUserData() {
       let token = this.jwt;
       let updatedObj = this.getUpdatedData();
-      axios.patch(
-        "http://localhost:8080/v1/users/self",
-        updatedObj,
-        {
+      axios
+        .patch("http://localhost:8080/v1/users/self", updatedObj, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
-        }
-      ).then(response => {
-          console.log(response)
+        })
+        .then((response) => {
+          console.log(response);
           this.$emit("tokenUpdate", ""); // kill token
-          this.$router.push({ name: "Login" })
-          })
-      .catch(err => console.error(err));
+          this.$router.push({ name: "Login" });
+        })
+        .catch((err) => console.error(err));
     },
     getUpdatedData() {
       let newUserObj = {};
@@ -116,6 +129,9 @@ export default {
         newUserObj["last_name"] = this.new_last_name;
       }
       return newUserObj;
+    },
+    toPayments() {
+        this.$router.push({ name: "Renew" });
     },
   },
   beforeMount() {
