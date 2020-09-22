@@ -54,6 +54,7 @@ jobs:
           cache-from: type=local,src=/tmp/.buildx-cache
           cache-to: type=local,dest=/tmp/.buildx-cache
           load: true
+          context: payments_server
           tags: |
             ${{ env.REPO }}/backend:${{ github.sha }}
             ${{ env.REPO }}/backend:latest
