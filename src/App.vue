@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <img src="@/assets/netsoc-logo.svg" alt="Netsoc Logo" style="max-height: 5rem">
-    <router-view v-on:successfulLogin="login" v-bind:jwt="jwt"/>
+    <router-view v-on:tokenUpdate="login" v-bind:jwt="jwt"/>
   </div>
 </template>
 
