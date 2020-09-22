@@ -77,14 +77,12 @@ export default {
             },
           }
         )
-        .then(function (response) {
-          return JSON.parse(response);
+        .then(function() {
+          // TODO: get better password
+          alert("Success, your password is now hunter22!");
         })
-        .then(function (text) {
-          console.log("Request successful", text);
-        })
-        .catch(function (error) {
-          console.log("Request failed", error);
+        .catch(function() {
+          alert("Failed to set your password to hunter22 :(");
         });
     },
   },

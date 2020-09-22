@@ -1,6 +1,0 @@
-{
-    "ACCOUNTS_BASE_URL": "http://localhost:3000",
-    "SUCCESS_URL": "/success",
-    "CANCEL_URL": "/cancel",
-    "SERVER_PORT": 4242
-}

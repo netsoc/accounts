@@ -4,9 +4,7 @@ const stripe = require('stripe')(STRIPE_PRIVATE_KEY);
 const endpointSecret = STRIPE_ENDPOINT_SECRET;
 const express = require('express');
 const cors = require('cors');
-const axios = require("axios").default;
 const bodyParser = require('body-parser')
-const fs = require('fs');
 const env = process.env;
 var corsOptions = {
     origin: env.ACCOUNTS_BASE_URL,

@@ -1,0 +1,9 @@
+FROM node:12-alpine
+
+COPY package.json yarn.lock /opt/
+RUN yarn --cwd /opt install
+
+WORKDIR /opt/accounts
+COPY entrypoint.dev.sh /entrypoint.sh
+
+ENTRYPOINT ["/entrypoint.sh"]
