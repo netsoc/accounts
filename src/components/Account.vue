@@ -99,7 +99,11 @@ export default {
             Authorization: `Bearer ${token}`,
           },
         }
-      ).then(response => console.log(response))
+      ).then(response => {
+          console.log(response)
+          this.$emit("tokenUpdate", ""); // kill token
+          this.$router.push({ name: "Login" })
+          })
       .catch(err => console.error(err));
     },
     getUpdatedData() {

@@ -47,7 +47,7 @@ export default {
     axios.post(`http://localhost:8080/v1/users/${username}/login`,{
       password: password
     }).then(data => {
-      this.$emit("tokenUpdate", data);
+      this.$emit("tokenUpdate", data.data.token);
     }).catch(response => console.log(response))
 
 

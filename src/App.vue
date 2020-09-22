@@ -14,10 +14,10 @@ export default {
     }
   },
   methods: {
-    login: function (data) {
-      console.log(data);
-      this.jwt = data.data.token;
-      this.$router.push({ name: "Account" })
+    login: function (token) {
+      this.jwt = token;
+      if (token.length > 1)
+        this.$router.push({ name: "Account" })
     },
   },
 }
