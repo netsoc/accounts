@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <img src="@/assets/netsoc-logo.svg" alt="Netsoc Logo" style="max-height: 5rem">
-    <router-view v-on:tokenUpdate="login" v-bind:jwt="jwt"/>
+    <router-view v-on:tokenUpdate="login" v-on:userID="updateUID" v-bind:jwt="jwt" v-bind:uid="uid"/>
   </div>
 </template>
 
@@ -10,7 +10,8 @@ export default {
   name: "Container",
   data() {
     return {
-      jwt: ""
+      jwt: "",
+      uid: "",
     }
   },
   methods: {
@@ -19,6 +20,9 @@ export default {
       if (token.length > 1)
         this.$router.push({ name: "Account" })
     },
+    updateUID: function (uid) {
+      this.uid = uid;
+    }
   },
 }
 </script>

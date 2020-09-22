@@ -99,6 +99,7 @@ export default {
         })
         .then((response) => {
           console.log(response);
+          this.$emit("userID", response.data.username);
           this.user = response.data;
         })
         .catch((response) => console.error(response));
@@ -131,6 +132,7 @@ export default {
       return newUserObj;
     },
     toPayments() {
+        this.$emit("userID", this.user.username);
         this.$router.push({ name: "Renew" });
     },
   },
