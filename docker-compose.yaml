@@ -45,6 +45,12 @@ services:
 
   iam:
     image: ghcr.io/netsoc/iamd:0.1.3
+    entrypoint:
+      - sh
+      - '-c'
+      - |
+        until nc -z db 5432; do sleep 0.2; done
+        exec /usr/local/bin/iamd
     environment:
       - IAMD_LOG_LEVEL=debug
       - IAMD_HTTP_LISTEN_ADDRESS=:8080
