@@ -14,6 +14,9 @@
       </div>
       <button v-else v-on:click="login">Login</button>
       <div>
+        <router-link to="resetPassword">Forgot your password? Reset it here.</router-link>
+      </div>
+      <div>
         Not an existing user?
         <router-link to="signup">Create an account.</router-link>
       </div>

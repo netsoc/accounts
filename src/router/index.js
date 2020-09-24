@@ -29,6 +29,16 @@ const routes = [
     path: '/renew',
     name: 'Renew',
     component: () => import('@/components/Renew.vue')
+  },
+  {
+    path: '/resetPassword',
+    name: 'Reset Password',
+    component: () => import('@/components/RequestReset.vue')
+  },
+  {
+    path: '/reset',
+    name: 'Reset',
+    component: () => import('@/components/Reset.vue')
   }
 ]
 

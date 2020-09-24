@@ -82,7 +82,7 @@ export default {
       let renewedDate = new Date(this.user.renewed);
       if (renewedDate.getTime() === new Date("0001-01-01T00:00:00Z").getTime())
         return "Never";
-      return renewedDate.getTime();
+      return renewedDate.toDateString();
     },
     isExpired: function () {
       let renewedDate = new Date(this.user.renewed);
