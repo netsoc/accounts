@@ -101,6 +101,9 @@ export default {
       let renewedDate = new Date(this.user.renewed);
       return renewedDate.getTime() <= new Date().getTime();
     },
+    logoutOnResponse: function () {
+      return this.edit_password || this.edit_username || this.edit_email;
+    },
   },
   methods: {
     getUserData() {
@@ -120,7 +123,7 @@ export default {
           this.user = response.data;
         })
         .catch((error) => {
-          console.error(error);
+          this.failed_to_get_user = true;
           this.account_error_response = error.response.data.message;
         });
     },
@@ -131,17 +134,20 @@ export default {
       // eslint-disable-next-line
       const URL = IAM_UPDATE_USER_DATA_URL;
 
+      const logoutOnResponse = this.logoutOnResponse;
       axios
         .patch(URL, updatedObj, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
         })
-        .then(() => {
-          //TODO only log the user out if something important changes: username, email, password
-          //TODO otherwise call getuserdata()
-
-          this.logout();
+        .then(() =>{
+          if (logoutOnResponse) {
+            this.logout();
+          } else {
+            this.resetEditOptions();
+            this.getUserData();
+          }
         })
         .catch((error) => {
           this.update_error_message = error.response.data.message;
@@ -165,6 +171,19 @@ export default {
     logout() {
       this.$emit("tokenUpdate", "");
       this.$router.push({ name: "Login" });
+    },
+    resetEditOptions() {
+      this.edit_username = false;
+      this.edit_email = false;
+      this.edit_password = false;
+      this.edit_name = false;
+      this.new_username = "";
+      this.new_email = "";
+      this.new_email_verify = "";
+      this.new_password = "";
+      this.new_password_verify = "";
+      this.new_first_name = "";
+      this.new_last_name = "";
     },
   },
   beforeMount() {
