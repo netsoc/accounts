@@ -56,7 +56,10 @@ export default {
         .then((data) => {
           this.$emit("tokenUpdate", data.data.token);
         })
-        .catch((response) => console.log(response));
+        .catch((response) => {
+          console.log(response);
+          this.response_pending = false;
+        });
 
       this.response_pending = true;
     },

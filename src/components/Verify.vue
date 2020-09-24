@@ -44,8 +44,7 @@ export default {
             default:
               break;
           }
-        })
-        .catch((response) => console.error(response));
+        });
     },
   },
   beforeMount() {

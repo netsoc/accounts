@@ -15,11 +15,11 @@ export default {
   data() {
     return {
       username: "",
-      response: ""
+      response: "",
     };
   },
   methods: {
-    sendResetLink () {
+    sendResetLink() {
       let username = this.username;
       const axios = require("axios").default;
       // eslint-disable-next-line
@@ -35,13 +35,15 @@ export default {
           }
         )
         .then((res) => {
-            this.response = "Link sent. Please check your junk folder if you cannot see the email"
-            console.log(res)
+          this.response =
+            "Link sent. Please check your junk folder if you cannot see the email";
+          console.log(res);
         })
         .catch((res) => {
-            this.response = "Failed to send email, please check the username is correct."
-            console.error(res)
-            });
+          this.response =
+            "Failed to send email, please check the username is correct.";
+          console.error(res);
+        });
     },
   },
 };

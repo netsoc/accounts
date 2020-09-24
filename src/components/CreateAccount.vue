@@ -77,11 +77,11 @@ export default {
             },
           }
         )
-        .then(function() {
+        .then(function () {
           // TODO: get better password
           alert("Success, your password is now hunter22!");
         })
-        .catch(function() {
+        .catch(function () {
           alert("Failed to set your password to hunter22 :(");
         });
     },

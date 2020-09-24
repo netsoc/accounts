@@ -4,7 +4,7 @@
  */
 export let isValidUsername = (username) => {
     return (username.length > 0 && username.length < 256);
-}
+};
 
 /**
  * Returns true if strings match
@@ -13,7 +13,7 @@ export let isValidUsername = (username) => {
  */
 export let stringsMatch = (stringA, stringB) => {
     return stringA === stringB;
-}
+};
 
 /**
  * Returns true if email is an @tcd.ie email
@@ -21,9 +21,9 @@ export let stringsMatch = (stringA, stringB) => {
  * @param {String} email
  */
 export let isValidEmail = (email) => {
-    const re = /^\S+@tcd.ie$/
+    const re = /^\S+@tcd.ie$/;
     return re.test(String(email).toLowerCase());
-}
+};
 
 /**
  * Returns true if password is the correct length
@@ -31,4 +31,4 @@ export let isValidEmail = (email) => {
  */
 export let isValidPassword = (password) => {
     return password.length > 7 && password.length < 256;
-}
+};

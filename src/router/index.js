@@ -1,8 +1,8 @@
-import Vue from 'vue'
-import VueRouter from 'vue-router'
-import LoginPrompt from '@/components/Login.vue'
+import Vue from 'vue';
+import VueRouter from 'vue-router';
+import LoginPrompt from '@/components/Login.vue';
 
-Vue.use(VueRouter)
+Vue.use(VueRouter);
 
 const routes = [
   {
@@ -40,12 +40,12 @@ const routes = [
     name: 'Reset',
     component: () => import('@/components/Reset.vue')
   }
-]
+];
 
 const router = new VueRouter({
   mode: 'history',
   base: process.env.BASE_URL,
   routes
-})
+});
 
-export default router
+export default router;

@@ -43,13 +43,14 @@ export default {
           }
         )
         .then(() => {
-          this.resStatusText = 'Successfully updated password. Redirecting...'
+          this.resStatusText = "Successfully updated password. Redirecting...";
           setTimeout(() => {
             this.$router.push({ name: "Login" });
           }, 1500);
         })
         .catch(() => {
-          this.resStatusText = 'Could not reset password, please check it is longer than 8 characters and you used the correct link';
+          this.resStatusText =
+            "Could not reset password, please check it is longer than 8 characters and you used the correct link";
         });
     },
   },
