@@ -77,13 +77,17 @@ export default {
             },
           }
         )
-        .then(function () {
-          // TODO: get better password
-          alert("Success, your password is now hunter22!");
+        .then(() => {
+          this.response_pending = false;
+          this.response_message =
+            "Account created, please verify your email before logging in";
+          setTimeout(() => this.$router.push({ name: "Login" }), 1500);
         })
-        .catch(function () {
-          alert("Failed to set your password to hunter22 :(");
+        .catch((error) => {
+          this.response_pending = false;
+          this.response_message = `Error: ${error.response.data.message}`;
         });
+      this.response_pending = true;
     },
   },
 };
