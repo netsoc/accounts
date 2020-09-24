@@ -5,7 +5,7 @@ const endpointSecret = STRIPE_ENDPOINT_SECRET;
 const express = require('express');
 const cors = require('cors');
 const bodyParser = require('body-parser');
-const axios = require("axios").default
+const axios = require("axios").default;
 const env = process.env;
 var corsOptions = {
     origin: env.ACCOUNTS_BASE_URL,
@@ -41,8 +41,7 @@ app.post('/create-session', bodyParser.json(), cors(corsOptions), async (req, re
 });
 
 const updateUser = (session) => {
-    let rightNowLol = new Date();
-    rightNowLol = rightNowLol.toISOString();
+    let rightNowLol = (new Date()).toISOString();
     axios.patch(`${env.IAM_BASE_URL}${env.UPDATE_URL}${session.client_reference_id}`, {
         renewed: rightNowLol
     }, {
