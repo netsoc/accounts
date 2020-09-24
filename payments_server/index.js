@@ -4,7 +4,8 @@ const stripe = require('stripe')(STRIPE_PRIVATE_KEY);
 const endpointSecret = STRIPE_ENDPOINT_SECRET;
 const express = require('express');
 const cors = require('cors');
-const bodyParser = require('body-parser')
+const bodyParser = require('body-parser');
+const axios = require("axios").default
 const env = process.env;
 var corsOptions = {
     origin: env.ACCOUNTS_BASE_URL,
@@ -40,10 +41,19 @@ app.post('/create-session', bodyParser.json(), cors(corsOptions), async (req, re
 });
 
 const updateUser = (session) => {
-    console.log("Fulfilling order", session.client_reference_id);
+    let rightNowLol = new Date();
+    rightNowLol = rightNowLol.toISOString();
+    axios.patch(`${env.IAM_BASE_URL}${env.UPDATE_URL}${session.client_reference_id}`, {
+        renewed: rightNowLol
+    }, {
+        headers : {
+            "Authorization": `Bearer ${env.IAM_JWT}`
+        }
+    }).then(res => console.log(res))
+    .catch(res => console.error(res))
 }
 
-app.post('/webhook', bodyParser.raw({type: 'application/json'}), (request, response) => {
+app.post('/webhook', bodyParser.raw({ type: 'application/json' }), (request, response) => {
     const payload = request.body;
     const sig = request.headers['stripe-signature']
     let event;

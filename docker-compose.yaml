@@ -18,9 +18,11 @@ services:
       context: ./payments_server
     environment:
       - ACCOUNTS_BASE_URL=http://localhost:3000
+      - IAM_BASE_URL=http://iam:8080/v1
       - SUCCESS_URL=/success
       - CANCEL_URL=/cancel
       - SERVER_PORT=4242
+      - UPDATE_URL=/users/
     env_file: .env
     volumes:
       - ./payments_server:/opt/accounts
