@@ -32,8 +32,14 @@
       <div>{{update_error_message}}</div>
     </div>
     <div>
+      <div>
       <span>Last Renewed:</span>
       <span>{{renewedDateString}}</span>
+      </div>
+      <div>
+        <span>Expires:</span>
+        <span>{{expiryDateString}}</span>
+      </div>
       <button v-if="isExpired" v-on:click="toPayments">Renew Account</button>
     </div>
     <button v-on:click="logout">Logout</button>
@@ -96,6 +102,9 @@ export default {
       if (renewedDate.getTime() === new Date("0001-01-01T00:00:00Z").getTime())
         return "Never";
       return renewedDate.toDateString();
+    },
+    expiryDateString: function () {
+      return new Date(JSON.parse(atob(this.jwt.split('.')[1]))['exp'] * 1000).toDateString();
     },
     isExpired: function () {
       let renewedDate = new Date(this.user.renewed);
