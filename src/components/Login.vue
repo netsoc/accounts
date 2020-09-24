@@ -20,6 +20,7 @@
         Not an existing user?
         <router-link to="signup">Create an account.</router-link>
       </div>
+      <div>{{response_message}}</div>
     </div>
   </div>
 </template>
@@ -34,6 +35,7 @@ export default {
       no_username: false,
       no_password: false,
       response_pending: false,
+      response_message: "",
     };
   },
   methods: {
@@ -53,12 +55,12 @@ export default {
         .post(URL.replace("${username}", username), {
           password: password,
         })
-        .then((data) => {
-          this.$emit("tokenUpdate", data.data.token);
+        .then((response) => {
+          this.$emit("tokenUpdate", response.data.token);
         })
-        .catch((response) => {
-          console.log(response);
+        .catch((error) => {
           this.response_pending = false;
+          this.response_message = `Error: ${error.response.data.message}`;
         });
 
       this.response_pending = true;
