@@ -1,7 +1,11 @@
 <template>
   <div id="account_container">
     <div>
-      <div>
+      <div v-if="failed_to_get_user">
+        Sorry, we couldn't access the details of this account.
+        Error: {{account_error_response}}
+      </div>
+      <div v-else>
         <span>Username:</span>
         <span>{{user.username}}</span>
       </div>
@@ -25,12 +29,14 @@
       <input v-if="edit_name" v-model="new_first_name" placeholder="Your first name" />
       <input v-if="edit_name" v-model="new_last_name" placeholder="Your last name" />
       <button v-on:click="updateUserData" :disabled="!modifyEnabled">Update Account</button>
+      <div>{{update_error_message}}</div>
     </div>
     <div>
       <span>Last Renewed:</span>
       <span>{{renewedDateString}}</span>
       <button v-if="isExpired" v-on:click="toPayments">Renew Account</button>
     </div>
+    <button v-on:click="logout">Logout</button>
   </div>
 </template>
 
@@ -55,6 +61,9 @@ export default {
       new_password_verify: "",
       new_first_name: "",
       new_last_name: "",
+      failed_to_get_user: false,
+      account_error_response: "",
+      update_error_message: "",
     };
   },
   computed: {
@@ -107,11 +116,13 @@ export default {
           },
         })
         .then((response) => {
-          console.log(response);
           this.$emit("userID", response.data.username);
           this.user = response.data;
         })
-        .catch((response) => console.error(response));
+        .catch((error) => {
+          console.error(error);
+          this.account_error_response = error.response.data.message;
+        });
     },
     updateUserData() {
       let token = this.jwt;
@@ -126,12 +137,15 @@ export default {
             Authorization: `Bearer ${token}`,
           },
         })
-        .then((response) => {
-          console.log(response);
-          this.$emit("tokenUpdate", ""); // kill token
-          this.$router.push({ name: "Login" });
+        .then(() => {
+          //TODO only log the user out if something important changes: username, email, password
+          //TODO otherwise call getuserdata()
+
+          this.logout();
         })
-        .catch((err) => console.error(err));
+        .catch((error) => {
+          this.update_error_message = error.response.data.message;
+        });
     },
     getUpdatedData() {
       let newUserObj = {};
@@ -147,6 +161,10 @@ export default {
     toPayments() {
       this.$emit("userID", this.user.username);
       this.$router.push({ name: "Renew" });
+    },
+    logout() {
+      this.$emit("tokenUpdate", "");
+      this.$router.push({ name: "Login" });
     },
   },
   beforeMount() {
