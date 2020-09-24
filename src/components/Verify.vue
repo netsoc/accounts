@@ -31,7 +31,7 @@ export default {
             },
           }
         )
-        .then((response) => {
+        .finally((response) => {
           console.log(response);
           switch (response.status) {
             case 204:

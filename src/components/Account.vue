@@ -14,6 +14,9 @@
       <button v-on:click="edit_email = !edit_email">Edit Email</button>
       <input v-if="edit_email" v-model="new_email" placeholder="Your new email" />
       <input v-if="edit_email" v-model="new_email_verify" placeholder="Your new email" />
+      <button v-on:click="edit_password = !edit_password">Edit Password</button>
+      <input v-if="edit_password" v-model="new_password" placeholder="Your new password" />
+      <input v-if="edit_password" v-model="new_password_verify" placeholder="Your new password" />
       <div>
         <span>Name:</span>
         <span>{{user.first_name}} {{user.last_name}}</span>
@@ -49,6 +52,7 @@ export default {
       new_email: "",
       new_email_verify: "",
       new_password: "",
+      new_password_verify: "",
       new_first_name: "",
       new_last_name: "",
     };
