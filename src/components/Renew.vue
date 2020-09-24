@@ -7,7 +7,8 @@
         <h5>€2.00</h5>
       </div>
     </div>
-    <button v-on:click="createSession" id="checkout-button">Checkout</button>
+    <button v-on:click="createSession" id="checkout-button">Renew Membership</button>
+    <p>{{errorResponse}}</p>
   </section>
 </template>
 
@@ -16,7 +17,9 @@ export default {
   name: "Renew",
   props: ["uid"],
   data() {
-    return {};
+    return {
+      errorResponse: "",
+    };
   },
   methods: {
     createSession() {
@@ -29,27 +32,23 @@ export default {
       const URL = PAYMENT_CREATE_SESSION_URL;
 
       let uid = this.uid;
-      fetch(URL, {
-        method: "POST",
-        headers: {
-          "Access-Control-Allow-Headers": "Content-Type",
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ uid: uid }),
-      })
-        .then(function (response) {
-          return response.json();
-        })
-        .then(function (session) {
-          return stripe.redirectToCheckout({ sessionId: session.id });
-        })
-        .then(function (result) {
-          if (result.error) {
-            alert(result.error.message);
+      const axios = require("axios").default;
+      axios
+        .post(
+          URL,
+          {uid: uid},
+          {
+            headers: {
+              "Access-Control-Allow-Headers": "Content-Type",
+              "Content-Type": "application/json",
+            },
           }
+        )
+        .then((session) => {
+          stripe.redirectToCheckout({ sessionId: session.data.id });
         })
-        .catch(function (error) {
-          console.error("Error:", error);
+        .catch((error) => {
+          this.errorResponse = error.response.data.message;
         });
     },
   },
