@@ -1,12 +1,21 @@
 <template>
   <div id="app">
-    <img src="@/assets/netsoc-logo.svg" alt="Netsoc Logo" style="max-height: 5rem" />
-    <router-view
-      v-on:tokenUpdate="login"
-      v-on:userID="updateUID"
-      v-bind:jwt="jwt"
-      v-bind:uid="uid"
-    />
+    <div id="app-container">
+      <div id="app-wrapper">
+        <img
+          src="@/assets/netsoc-logo.svg"
+          alt="Netsoc Logo"
+          id="netsoc-logo"
+          v-on:click="toLogin"
+        />
+        <router-view
+          v-on:tokenUpdate="login"
+          v-on:userID="updateUID"
+          v-bind:jwt="jwt"
+          v-bind:uid="uid"
+        />
+      </div>
+    </div>
   </div>
 </template>
 
@@ -38,6 +47,12 @@ export default {
     updateUID(uid) {
       this.uid = uid;
     },
+    toLogin() {
+      let currentName = this.$router.history.current?.name;
+      if (currentName !== "Login" && currentName !== "Account") {
+        this.$router.push({ name: "Login" });
+      }
+    },
   },
 };
 </script>
@@ -49,18 +64,26 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
+  padding-top: 2rem;
+  max-width: 100%;
 }
 
-#nav {
-  padding: 30px;
+#app-container {
+  padding-left: auto;
+  padding-right: auto;
+  background-color: rgb(239, 251, 255);
+  box-shadow: 0rem 0rem 1rem rgb(208, 208, 208);
+  display: inline-block;
+  border-radius: 2rem;
 }
 
-#nav a {
-  font-weight: bold;
-  color: #2c3e50;
+#netsoc-logo {
+  max-height: 5rem;
+  padding-bottom: 1rem;
+  max-width: 100%;
 }
 
-#nav a.router-link-exact-active {
-  color: #42b983;
+#app-wrapper {
+  padding: 3rem;
 }
 </style>

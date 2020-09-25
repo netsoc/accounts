@@ -52,7 +52,7 @@ services:
       - sh
       - '-c'
       - |
-        until nc -z db 5432; do sleep 0.2; done
+        until nc -z db 5432; do sleep 1; done
         exec /usr/local/bin/iamd
     environment:
       - IAMD_LOG_LEVEL=debug

@@ -1,11 +1,18 @@
 <template>
   <div>
-    <div>Enter your username below and we will send you a password reset link.</div>
-    <div>
-      <input v-model="username" type="text" />
+    <div class="standard-text">
+      Enter your username below and we will send you a password reset link.
     </div>
-    <button v-on:click="sendResetLink">Reset password</button>
-    <div>{{response}}</div>
+    <div>
+      <input class="input-field input-margin" v-model="username" type="text" />
+    </div>
+    <button
+      class="action-button request-reset input-margin"
+      v-on:click="sendResetLink"
+    >
+      Reset password
+    </button>
+    <div class="standard-text">{{ response }}</div>
   </div>
 </template>
 
@@ -48,3 +55,26 @@ export default {
   },
 };
 </script>
+
+<style>
+.standard-text {
+  max-width: 20rem;
+  margin-bottom: 0.4rem;
+}
+
+.input-margin {
+  margin-bottom: 0.4rem;
+}
+
+.request-reset {
+  background-color: rgb(202, 139, 55);
+  width: 91%;
+  margin-left: 1.02rem;
+}
+
+.success-text {
+  color: rgb(69, 70, 30);
+  height: 2rem;
+  display: inline-block;
+}
+</style>

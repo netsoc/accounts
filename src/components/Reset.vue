@@ -1,11 +1,25 @@
 <template>
   <div>
-    <div>Enter your new password:</div>
-    <input v-model="password" type="password" />
-    <input v-model="repeat_password" type="password" />
-    <div v-if="password !== repeat_password">Passwords must match</div>
-    <button v-on:click="resetPassword">Update Password</button>
-    <div>{{resStatusText}}</div>
+    <div class="input-heading">Enter your new password:</div>
+    <input
+      class="input-field input-margin"
+      title="Password must be at least 8 characters long"
+      placeholder="hunter22"
+      v-model="password"
+      type="password"
+    />
+    <div class="input-heading">Repeat password:</div>
+    <input
+      class="input-field input-margin"
+      placeholder="hunter22"
+      v-model="repeat_password"
+      type="password"
+    />
+    <div class="input-error">{{ error_text }}</div>
+    <button class="action-button submit-button" v-on:click="resetPassword">
+      Update Password
+    </button>
+    <div class="success-text">{{ resStatusText }}</div>
   </div>
 </template>
 
@@ -18,6 +32,16 @@ export default {
       repeat_password: "",
       resStatusText: "",
     };
+  },
+  computed: {
+    error_text: function () {
+      if (this.password.length < 8) {
+        return "Password must be more than 8 characters long";
+      }
+      return this.password !== this.repeat_password
+        ? "Passwords must match"
+        : "";
+    },
   },
   methods: {
     verifyToken() {
@@ -48,9 +72,8 @@ export default {
             this.$router.push({ name: "Login" });
           }, 1500);
         })
-        .catch(() => {
-          this.resStatusText =
-            "Could not reset password, please check it is longer than 8 characters and you used the correct link";
+        .catch((error) => {
+          this.resStatusText = `Could not reset password. Error: ${error.response.data.message}`;
         });
     },
   },
@@ -59,3 +82,11 @@ export default {
   },
 };
 </script>
+
+<style>
+.submit-button {
+  background-color: rgb(202, 139, 55);
+  width: 91%;
+  margin-left: 1.02rem;
+}
+</style>

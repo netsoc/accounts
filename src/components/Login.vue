@@ -1,27 +1,24 @@
 <template>
-  <div id="login_container">
-    <div>
-      <div class>Username:</div>
-      <input v-model="username" type="text" />
-      <span v-if="no_username">Please enter your username</span>
-      <div>Password:</div>
-      <input v-model="password" type="password" />
-      <span v-if="no_password">Please enter a password</span>
-      <div v-if="response_pending" class="bouncing-loader">
-        <div></div>
-        <div></div>
-        <div></div>
-      </div>
-      <button v-else v-on:click="login">Login</button>
-      <div>
-        <router-link to="resetPassword">Forgot your password? Reset it here.</router-link>
-      </div>
-      <div>
-        Not an existing user?
-        <router-link to="signup">Create an account.</router-link>
-      </div>
-      <div>{{response_message}}</div>
+  <div>
+    <div class="input-heading">Username:</div>
+    <input class="input-field" v-model="username" type="text" />
+    <span class="input-error">{{ no_username_str }}</span>
+    <div class="input-heading">Password:</div>
+    <input class="input-field" v-model="password" type="password" />
+    <span class="input-error">{{ no_password_str }}</span>
+    <div v-if="response_pending" class="bouncing-loader">
+      <div></div>
+      <div></div>
+      <div></div>
     </div>
+    <button class="action-button log-in" v-else v-on:click="login">Login</button>
+    <div>or</div>
+    <button class="action-button sign-up" v-on:click="createAccount">Sign Up</button>
+    <div class="reset-link">
+      Forgot your password?
+      <router-link to="resetPassword"> Reset it here. </router-link>
+    </div>
+    <div>{{ response_message }}</div>
   </div>
 </template>
 
@@ -37,6 +34,14 @@ export default {
       response_pending: false,
       response_message: "",
     };
+  },
+  computed: {
+    no_username_str: function () {
+      return this.no_username ? "Please enter your username" : "";
+    },
+    no_password_str: function () {
+      return this.no_password ? "Please enter your password" : "";
+    },
   },
   methods: {
     login() {
@@ -60,7 +65,11 @@ export default {
         })
         .catch((error) => {
           this.response_pending = false;
-          this.response_message = `Error: ${error.response.data.message}`;
+          if (!error.response) {
+            this.response_message = "Could not contact the IAM service.";
+          } else {
+            this.response_message = `Error: ${error.response.data.message}`;
+          }
         });
 
       this.response_pending = true;
@@ -72,6 +81,9 @@ export default {
         this.$router.push({ name: "Account" });
       }
     },
+    createAccount() {
+      this.$router.push({ name: "Sign Up" });
+    },
   },
   beforeMount() {
     this.checkForCookie();
@@ -79,11 +91,7 @@ export default {
 };
 </script>
 
-<style scoped>
-#login_container {
-  border-radius: 1rem;
-}
-
+<style>
 @keyframes bouncing-loader {
   to {
     opacity: 0.1;
@@ -111,5 +119,51 @@ export default {
 
 .bouncing-loader > div:nth-child(3) {
   animation-delay: 0.4s;
+}
+
+.input-heading {
+  display: flex;
+  padding-left: 1rem;
+  font-size: 1rem;
+}
+
+.action-button {
+  display: block;
+  width: 90%;
+  border: none;
+  border-radius: 0.2rem;
+  font-size: 0.9rem;
+  padding: 0.5rem;
+  margin-left: 1.2rem;
+  cursor: pointer;
+}
+
+.log-in {
+  background-color: rgb(0, 184, 0);
+}
+
+.sign-up {
+  background-color: rgb(0, 102, 255);
+}
+
+.input-field {
+  width: 90%;
+  display: flex;
+  margin-left: 1rem;
+  margin-top: 0.1rem;
+  height: 1.3rem;
+  border-radius: 0.2rem;
+  border: 1px solid rgb(196, 196, 196);
+  font-size: 0.9rem;
+}
+
+.input-error {
+  color: red;
+  height: 1rem;
+  display: inline-block;
+}
+
+.reset-link {
+  padding-top: 1.5rem;
 }
 </style>

@@ -10,11 +10,11 @@ const env = process.env;
 var corsOptions = {
     origin: env.ACCOUNTS_BASE_URL,
     optionsSuccessStatus: 200
-}
+};
 const app = express();
 app.use(express.static('.'));
 
-app.options('/create-session', cors(corsOptions))
+app.options('/create-session', cors(corsOptions));
 
 app.post('/create-session', bodyParser.json(), cors(corsOptions), async (req, res) => {
     const session = await stripe.checkout.sessions.create({
@@ -27,7 +27,7 @@ app.post('/create-session', bodyParser.json(), cors(corsOptions), async (req, re
                         name: 'Netsoc Membership',
                         images: [process.env.NAT_URL],
                     },
-                    unit_amount: 200,
+                    unit_amount: 250,
                 },
                 quantity: 1,
             },
@@ -45,16 +45,16 @@ const updateUser = (session) => {
     axios.patch(`${env.IAM_BASE_URL}${env.UPDATE_URL}${session.client_reference_id}`, {
         renewed: rightNowLol
     }, {
-        headers : {
+        headers: {
             "Authorization": `Bearer ${env.IAM_JWT}`
         }
     }).then(res => console.log(res))
-    .catch(res => console.error(res))
-}
+        .catch(res => console.error(res));
+};
 
 app.post('/webhook', bodyParser.raw({ type: 'application/json' }), (request, response) => {
     const payload = request.body;
-    const sig = request.headers['stripe-signature']
+    const sig = request.headers['stripe-signature'];
     let event;
     try {
         event = stripe.webhooks.constructEvent(payload, sig, endpointSecret);

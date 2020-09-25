@@ -1,48 +1,119 @@
 <template>
-  <div id="account_container">
+  <div>
     <div>
       <div v-if="failed_to_get_user">
-        Sorry, we couldn't access the details of this account.
-        Error: {{account_error_response}}
+        Sorry, we couldn't access the details of this account. Error:
+        {{ account_error_response }}
       </div>
       <div v-else>
-        <span>Username:</span>
-        <span>{{user.username}}</span>
+        <span>Username: </span>
+        <span>{{ user.username }}</span>
       </div>
-      <button v-on:click="edit_username = !edit_username">Edit Username</button>
-      <input v-if="edit_username" v-model="new_username" placeholder="Your new username" />
+      <input
+        class="input-field account-input-field"
+        v-show="edit_username"
+        v-model="new_username"
+        :placeholder="user.username"
+      />
+      <button
+        class="action-button account-button edit-button"
+        v-on:click="edit_username = !edit_username"
+      >
+        Edit Username
+      </button>
       <div>
-        <span>Email:</span>
-        <span>{{user.email}}</span>
+        <span>Email: </span>
+        <span>{{ user.email }}</span>
       </div>
-      <button v-on:click="edit_email = !edit_email">Edit Email</button>
-      <input v-if="edit_email" v-model="new_email" placeholder="Your new email" />
-      <input v-if="edit_email" v-model="new_email_verify" placeholder="Your new email" />
-      <button v-on:click="edit_password = !edit_password">Edit Password</button>
-      <input v-if="edit_password" v-model="new_password" placeholder="Your new password" />
-      <input v-if="edit_password" v-model="new_password_verify" placeholder="Your new password" />
+      <input
+        class="input-field account-input-field"
+        v-show="edit_email"
+        v-model="new_email"
+        :placeholder="user.email"
+      />
+      <input
+        class="input-field account-input-field"
+        v-show="edit_email"
+        v-model="new_email_verify"
+        :placeholder="user.email"
+      />
+      <button
+        class="action-button account-button edit-button"
+        v-on:click="edit_email = !edit_email"
+      >
+        Edit Email
+      </button>
+      <input
+        class="input-field account-input-field"
+        v-show="edit_password"
+        v-model="new_password"
+        placeholder="Your new password"
+        title="Password must be at least 8 characters long"
+      />
+      <input
+        class="input-field account-input-field"
+        v-show="edit_password"
+        v-model="new_password_verify"
+        placeholder="Your new password"
+        title="Password must be at least 8 characters long"
+      />
+      <button
+        class="action-button account-button edit-button"
+        v-on:click="edit_password = !edit_password"
+      >
+        Edit Password
+      </button>
       <div>
         <span>Name:</span>
-        <span>{{user.first_name}} {{user.last_name}}</span>
+        <span>{{ user.first_name }} {{ user.last_name }}</span>
       </div>
-      <button v-on:click="edit_name = !edit_name">Edit Name</button>
-      <input v-if="edit_name" v-model="new_first_name" placeholder="Your first name" />
-      <input v-if="edit_name" v-model="new_last_name" placeholder="Your last name" />
-      <button v-on:click="updateUserData" :disabled="!modifyEnabled">Update Account</button>
-      <div>{{update_error_message}}</div>
+      <button
+        class="action-button account-button edit-button"
+        v-on:click="edit_name = !edit_name"
+      >
+        Edit Name
+      </button>
+      <input
+        class="input-field account-input-field"
+        v-show="edit_name"
+        v-model="new_first_name"
+        placeholder="Your first name"
+      />
+      <input
+        class="input-field account-input-field"
+        v-show="edit_name"
+        v-model="new_last_name"
+        placeholder="Your last name"
+      />
+      <button
+        class="action-button account-button submit-button"
+        v-on:click="updateUserData"
+        :disabled="!modifyEnabled"
+      >
+        Update Account
+      </button>
+      <div>{{ update_error_message }}</div>
     </div>
     <div>
       <div>
         <span>Last Renewed:</span>
-        <span>{{renewedDateString}}</span>
+        <span>{{ renewedDateString }}</span>
       </div>
       <div>
         <span>Expires:</span>
-        <span>{{expiryDateString}}</span>
+        <span>{{ expiryDateString }}</span>
       </div>
-      <button v-if="isExpired" v-on:click="toPayments">Renew Account</button>
+      <button
+        class="action-button account-button renew-button"
+        v-if="isExpired"
+        v-on:click="toPayments"
+      >
+        Renew Account
+      </button>
     </div>
-    <button v-on:click="logout">Logout</button>
+    <button class="action-button account-button log-out" v-on:click="logout">
+      Logout
+    </button>
   </div>
 </template>
 
@@ -88,7 +159,11 @@ export default {
           !userFn.stringsMatch(this.new_email, this.new_email_verify))
       )
         return false;
-      if (this.edit_password && !userFn.isValidPassword(this.new_password))
+      if (
+        this.edit_password &&
+        (!userFn.isValidPassword(this.new_password) ||
+          !userFn.stringsMatch(this.new_password, this.new_password_verify))
+      )
         return false;
       if (
         this.edit_name &&
@@ -136,6 +211,11 @@ export default {
         .catch((error) => {
           this.failed_to_get_user = true;
           this.account_error_response = error.response.data.message;
+          setTimeout(() => {
+            this.$emit("tokenUpdate", "");
+            window.localStorage.setItem("token", "");
+            this.$router.push({ name: "Login" });
+          }, 1000);
         });
     },
     updateUserData() {
@@ -161,7 +241,7 @@ export default {
           }
         })
         .catch((error) => {
-          this.update_error_message = error.response.data.message;
+          this.update_error_message = error.response?.data?.message;
           setTimeout(() => this.$router.push({ name: "Login" }), 1500);
         });
     },
@@ -215,45 +295,37 @@ export default {
 </script>
 
 <style scoped>
-#account_container {
-  border-radius: 1rem;
-  border: 1px solid black;
-}
-
-.existing-data {
-  grid-column: 1;
-}
-
-.new-data {
-  grid-column: 2;
-}
-
-@keyframes bouncing-loader {
-  to {
-    opacity: 0.1;
-    transform: translate3d(0, -1rem, 0);
-  }
-}
-
-.bouncing-loader {
-  display: flex;
-  justify-content: center;
-}
-
-.bouncing-loader > div {
-  width: 1rem;
+.account-input-field {
+  width: 75%;
+  margin-left: 2.2rem;
   height: 1rem;
-  margin: 3rem 0.2rem;
-  background: #8385aa;
-  border-radius: 50%;
-  animation: bouncing-loader 0.6s infinite alternate;
+  margin-bottom: 0.3rem;
 }
 
-.bouncing-loader > div:nth-child(2) {
-  animation-delay: 0.2s;
+.account-button {
+  padding: 0.3rem;
+  width: 70%;
+  margin-left: 2.7rem;
+  margin-bottom: 0.2rem;
 }
 
-.bouncing-loader > div:nth-child(3) {
-  animation-delay: 0.4s;
+.edit-button {
+  background-color: rgb(0, 123, 255);
+}
+
+.submit-button {
+  background-color: orange;
+}
+
+.submit-button:disabled {
+  background-color: rgb(255, 223, 165);
+}
+
+.log-out {
+  background-color: red;
+}
+
+.renew-button {
+  background-color: rgba(165, 65, 42, 0.912);
 }
 </style>
