@@ -28,11 +28,14 @@ export default {
     };
   },
   methods: {
-    login: function (token) {
+    login(token) {
       this.jwt = token;
-      if (token.length > 1) this.$router.push({ name: "Account" });
+      if (token.length > 1) {
+        window.localStorage.setItem("token", token);
+        this.$router.push({ name: "Account" });
+      }
     },
-    updateUID: function (uid) {
+    updateUID(uid) {
       this.uid = uid;
     },
   },

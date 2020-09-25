@@ -31,19 +31,13 @@ export default {
             },
           }
         )
-        .finally((response) => {
-          console.log(response);
-          switch (response.status) {
-            case 204:
+        .then(() => {
               this.response_message = "Email Confirmed, Redirecting...";
               setTimeout(() => {
                 this.$router.push({ name: "Login" });
               }, 1500);
-              break;
-
-            default:
-              break;
-          }
+        }).catch(error => {
+          this.response_message = `Error: ${error.response.data.message}`
         });
     },
   },

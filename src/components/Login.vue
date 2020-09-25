@@ -65,6 +65,16 @@ export default {
 
       this.response_pending = true;
     },
+    checkForCookie() {
+      let token = window.localStorage.getItem("token");
+      if (token.length > 1) {
+        this.$emit("tokenUpdate", token);
+        this.$router.push({ name: "Account" });
+      }
+    },
+  },
+  beforeMount() {
+    this.checkForCookie();
   },
 };
 </script>

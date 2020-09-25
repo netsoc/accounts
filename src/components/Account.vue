@@ -33,8 +33,8 @@
     </div>
     <div>
       <div>
-      <span>Last Renewed:</span>
-      <span>{{renewedDateString}}</span>
+        <span>Last Renewed:</span>
+        <span>{{renewedDateString}}</span>
       </div>
       <div>
         <span>Expires:</span>
@@ -104,7 +104,9 @@ export default {
       return renewedDate.toDateString();
     },
     expiryDateString: function () {
-      return new Date(JSON.parse(atob(this.jwt.split('.')[1]))['exp'] * 1000).toDateString();
+      return new Date(
+        JSON.parse(atob(this.jwt.split(".")[1]))["exp"] * 1000
+      ).toDateString();
     },
     isExpired: function () {
       let renewedDate = new Date(this.user.renewed);
@@ -150,7 +152,7 @@ export default {
             Authorization: `Bearer ${token}`,
           },
         })
-        .then(() =>{
+        .then(() => {
           if (logoutOnResponse) {
             this.logout();
           } else {
@@ -160,6 +162,7 @@ export default {
         })
         .catch((error) => {
           this.update_error_message = error.response.data.message;
+          setTimeout(() => this.$router.push({ name: "Login" }), 1500);
         });
     },
     getUpdatedData() {
@@ -179,6 +182,7 @@ export default {
     },
     logout() {
       this.$emit("tokenUpdate", "");
+      window.localStorage.setItem("token", "");
       this.$router.push({ name: "Login" });
     },
     resetEditOptions() {
@@ -197,7 +201,12 @@ export default {
   },
   beforeMount() {
     if (this.jwt.length < 1) {
-      this.$router.push({ name: "Login" });
+      let storedToken = window.localStorage.getItem("token");
+      if (storedToken.length < 1) {
+        this.$router.push({ name: "Login" });
+      } else {
+        this.$emit("tokenUpdate", storedToken);
+      }
     }
     this.getUserData();
     this.modifyEnabled;
