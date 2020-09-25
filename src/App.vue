@@ -13,6 +13,14 @@
 <script>
 export default {
   name: "Container",
+  watch: {
+    $route: {
+      immediate: true,
+      handler(to) {
+        document.title = to.meta.title || "Netsoc Accounts Manager";
+      },
+    },
+  },
   data() {
     return {
       jwt: "",

@@ -57,19 +57,18 @@ app.post('/webhook', bodyParser.raw({ type: 'application/json' }), (request, res
     const sig = request.headers['stripe-signature']
     let event;
     try {
-      event = stripe.webhooks.constructEvent(payload, sig, endpointSecret);
+        event = stripe.webhooks.constructEvent(payload, sig, endpointSecret);
     } catch (err) {
-      return response.status(400).send(`Webhook Error: ${err.message}`);
+        return response.status(400).send(`Webhook Error: ${err.message}`);
     }
-
     // Handle the checkout.session.completed event
     if (event.type === 'checkout.session.completed') {
-      const session = event.data.object;
+        const session = event.data.object;
 
-      updateUser(session);
+        updateUser(session);
     }
     response.status(200);
-  });
+});
 
 const server = app.listen(env.SERVER_PORT, () => console.log(`Running on port ${env.SERVER_PORT}`));
 
