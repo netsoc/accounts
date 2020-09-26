@@ -20,6 +20,8 @@
 </template>
 
 <script>
+import * as tokenFn from "./components/utils/localToken";
+
 export default {
   name: "Container",
   watch: {
@@ -39,10 +41,7 @@ export default {
   methods: {
     login(token) {
       this.jwt = token;
-      if (token.length > 1) {
-        window.localStorage.setItem("token", token);
-        this.$router.push({ name: "Account" });
-      }
+      tokenFn.dumbSetLocalToken(token);
     },
     updateUID(uid) {
       this.uid = uid;
@@ -53,6 +52,12 @@ export default {
         this.$router.push({ name: "Login" });
       }
     },
+  },
+  beforeMount() {
+    let token = tokenFn.checkForToken();
+    if (token.hasToken) {
+      this.jwt = token.token;
+    }
   },
 };
 </script>

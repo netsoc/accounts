@@ -15,7 +15,9 @@
       <button type="submit" class="action-button log-in" v-else v-on:click="login">Login</button>
     </form>
     <div>or</div>
-    <button class="action-button sign-up" v-on:click="createAccount">Sign Up</button>
+    <button class="action-button sign-up" v-on:click="createAccount">
+      Sign Up
+    </button>
     <div class="reset-link">
       Forgot your password?
       <router-link to="resetPassword"> Reset it here. </router-link>
@@ -25,8 +27,11 @@
 </template>
 
 <script>
+import * as tokenFn from "./utils/localToken";
+
 export default {
   name: "LoginPrompt",
+  props: ["jwt"],
   data() {
     return {
       username: "",
@@ -63,9 +68,11 @@ export default {
           password: password,
         })
         .then((response) => {
-          this.$emit("tokenUpdate", response.data.token);
+          tokenFn.emitToken.bind(this)(response.data.token ?? "");
+          this.$router.push({ name: "Account" });
         })
         .catch((error) => {
+          console.log(error);
           this.response_pending = false;
           if (!error.response) {
             this.response_message = "Could not contact the IAM service.";
@@ -76,19 +83,14 @@ export default {
 
       this.response_pending = true;
     },
-    checkForCookie() {
-      let token = window.localStorage.getItem("token");
-      if (token.length > 1) {
-        this.$emit("tokenUpdate", token);
-        this.$router.push({ name: "Account" });
-      }
-    },
     createAccount() {
       this.$router.push({ name: "Sign Up" });
     },
   },
   beforeMount() {
-    this.checkForCookie();
+    if (this.jwt.length > 1) {
+      this.$router.push({ name: "Account" });
+    }
   },
 };
 </script>
@@ -109,7 +111,7 @@ export default {
 .bouncing-loader > div {
   width: 1rem;
   height: 1rem;
-  margin: 3rem 0.2rem;
+  margin: 0.5rem 0.2rem;
   background: #8385aa;
   border-radius: 50%;
   animation: bouncing-loader 0.6s infinite alternate;

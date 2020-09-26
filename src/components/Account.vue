@@ -49,6 +49,7 @@
         v-model="new_password"
         placeholder="Your new password"
         title="Password must be at least 8 characters long"
+        type="password"
       />
       <input
         class="input-field account-input-field"
@@ -56,6 +57,7 @@
         v-model="new_password_verify"
         placeholder="Your new password"
         title="Password must be at least 8 characters long"
+        type="password"
       />
       <button
         class="action-button account-button edit-button"
@@ -120,6 +122,7 @@
 <script>
 const axios = require("axios").default;
 import * as userFn from "./utils/login";
+import * as tokenFn from "./utils/localToken";
 
 export default {
   name: "Account",
@@ -174,14 +177,15 @@ export default {
     },
     renewedDateString: function () {
       let renewedDate = new Date(this.user.renewed);
-      if (renewedDate.getTime() === new Date("0001-01-01T00:00:00Z").getTime())
+      if (renewedDate.getTime() <= new Date("2000-01-01T00:00:00Z").getTime())
         return "Never";
       return renewedDate.toDateString();
     },
     expiryDateString: function () {
-      return new Date(
+      let tokenDate = new Date(
         JSON.parse(atob(this.jwt.split(".")[1]))["exp"] * 1000
-      ).toDateString();
+      )
+      return tokenDate.getTime() <= new Date("2000-01-01T00:00:00Z").getTime()? 'Never Renewed' : tokenDate.toDateString();
     },
     isExpired: function () {
       let renewedDate = new Date(this.user.renewed);
@@ -212,9 +216,7 @@ export default {
           this.failed_to_get_user = true;
           this.account_error_response = error.response.data.message;
           setTimeout(() => {
-            this.$emit("tokenUpdate", "");
-            window.localStorage.setItem("token", "");
-            this.$router.push({ name: "Login" });
+            tokenFn.emitToken("").bind(this);
           }, 1000);
         });
     },
@@ -230,6 +232,7 @@ export default {
         .patch(URL, updatedObj, {
           headers: {
             Authorization: `Bearer ${token}`,
+            Accept: "text/html",
           },
         })
         .then(() => {
@@ -261,8 +264,7 @@ export default {
       this.$router.push({ name: "Renew" });
     },
     logout() {
-      this.$emit("tokenUpdate", "");
-      window.localStorage.setItem("token", "");
+      tokenFn.emitToken.bind(this)("");
       this.$router.push({ name: "Login" });
     },
     resetEditOptions() {
@@ -280,16 +282,12 @@ export default {
     },
   },
   beforeMount() {
-    if (this.jwt.length < 1) {
-      let storedToken = window.localStorage.getItem("token");
-      if (storedToken.length < 1) {
-        this.$router.push({ name: "Login" });
-      } else {
-        this.$emit("tokenUpdate", storedToken);
-      }
+    if (!tokenFn.checkForToken().hasToken) {
+      this.$router.push({ name: "Login" });
+    } else {
+      this.getUserData();
+      this.modifyEnabled;
     }
-    this.getUserData();
-    this.modifyEnabled;
   },
 };
 </script>
