@@ -1,17 +1,19 @@
 <template>
   <div>
-    <div class="input-heading">Username:</div>
-    <input class="input-field" v-model="username" type="text" />
-    <span class="input-error">{{ no_username_str }}</span>
-    <div class="input-heading">Password:</div>
-    <input class="input-field" v-model="password" type="password" />
-    <span class="input-error">{{ no_password_str }}</span>
-    <div v-if="response_pending" class="bouncing-loader">
-      <div></div>
-      <div></div>
-      <div></div>
-    </div>
-    <button class="action-button log-in" v-else v-on:click="login">Login</button>
+    <form>
+      <div class="input-heading">Username:</div>
+      <input class="input-field" v-model="username" type="text" />
+      <span class="input-error">{{ no_username_str }}</span>
+      <div class="input-heading">Password:</div>
+      <input class="input-field" v-model="password" type="password" />
+      <span class="input-error">{{ no_password_str }}</span>
+      <div v-if="response_pending" class="bouncing-loader">
+        <div></div>
+        <div></div>
+        <div></div>
+      </div>
+      <button type="submit" class="action-button log-in" v-else v-on:click="login">Login</button>
+    </form>
     <div>or</div>
     <button class="action-button sign-up" v-on:click="createAccount">Sign Up</button>
     <div class="reset-link">
