@@ -4,7 +4,9 @@ WORKDIR /opt/accounts
 COPY package.json yarn.lock ./
 RUN yarn install
 
-COPY ./ ./
+COPY babel.config.js vue.config.js ./
+COPY public ./public/
+COPY src ./src/
 RUN yarn build
 
 
@@ -16,7 +18,7 @@ COPY nginx.conf /etc/nginx/conf.d/site.conf
 COPY --from=builder /opt/accounts/dist/ /srv/accounts/
 
 ENV IAM_BASE_URL=http://localhost:8080/v1 \
-    IAM_BASE_URL=/users/\${username}/login \
+    IAM_LOGIN_URL=/users/\${username}/login \
     IAM_VERIFY_URL=/users/self/login \
     IAM_CREATE_ACCOUNT_URL=/users \
     IAM_GET_USER_DATA_URL=/users/self \
