@@ -24,6 +24,7 @@ services:
       - CANCEL_URL=/cancel
       - SERVER_PORT=4242
       - UPDATE_URL=/users/
+      - UNIT_AMOUNT=250
     env_file: .env
     volumes:
       - ./payments_server:/opt/accounts

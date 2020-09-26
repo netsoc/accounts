@@ -29,9 +29,9 @@ app.post(`${basePath}/create-session`, bodyParser.json(), cors(corsOptions), asy
                     currency: 'eur',
                     product_data: {
                         name: 'Netsoc Membership',
-                        images: [process.env.NAT_URL],
+                        images: [env.NAT_URL],
                     },
-                    unit_amount: 250,
+                    unit_amount: parseInt(env.UNIT_AMOUNT),
                 },
                 quantity: 1,
             },

@@ -16,7 +16,8 @@ ENV ACCOUNTS_BASE_URL=http://localhost:3000 \
     STRIPE_PRIVATE_KEY= \
     STRIPE_ENDPOINT_SECRET= \
     IAM_JWT= \
-    BASE_PATH=
+    BASE_PATH= \
+    UNIT_AMOUNT=250
 
 EXPOSE 4242/tcp
 ENTRYPOINT ["node", "index.js"]
