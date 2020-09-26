@@ -25,7 +25,7 @@ ENV IAM_BASE_URL=http://localhost:8080/v1 \
     IAM_UPDATE_USER_DATA_URL=/users/self
 
 ENV PAYMENT_BASE_URL=http://localhost:4242 \
-    PAYMENT_CREATE_SESSION_URL=/create/session
+    PAYMENT_CREATE_SESSION_URL=/create-session
 
 ENV STRIPE_PUBLIC_KEY=
 
