@@ -15,6 +15,9 @@ const app = express();
 app.use(express.static('.'));
 
 const basePath = env.BASE_PATH || '';
+
+app.get(`${basePath}/health`, async (_, res) => res.status(204).end());
+
 app.options(`${basePath}/create-session`, cors(corsOptions));
 
 app.post(`${basePath}/create-session`, bodyParser.json(), cors(corsOptions), async (req, res) => {
