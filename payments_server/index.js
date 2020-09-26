@@ -14,9 +14,10 @@ var corsOptions = {
 const app = express();
 app.use(express.static('.'));
 
-app.options('/create-session', cors(corsOptions));
+const basePath = env.BASE_PATH || '';
+app.options(`${basePath}/create-session`, cors(corsOptions));
 
-app.post('/create-session', bodyParser.json(), cors(corsOptions), async (req, res) => {
+app.post(`${basePath}/create-session`, bodyParser.json(), cors(corsOptions), async (req, res) => {
     const session = await stripe.checkout.sessions.create({
         payment_method_types: ['card'],
         line_items: [
@@ -52,7 +53,7 @@ const updateUser = (session) => {
         .catch(res => console.error(res));
 };
 
-app.post('/webhook', bodyParser.raw({ type: 'application/json' }), (request, response) => {
+app.post(`${basePath}/webhook`, bodyParser.raw({ type: 'application/json' }), (request, response) => {
     const payload = request.body;
     const sig = request.headers['stripe-signature'];
     let event;
