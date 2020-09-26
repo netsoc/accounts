@@ -1,0 +1,87 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "accounts.fullname" . }}
+  labels:
+    {{- include "accounts.labels" . | nindent 4 }}
+spec:
+{{- if not .Values.autoscaling.enabled }}
+  replicas: {{ .Values.replicaCount }}
+{{- end }}
+  selector:
+    matchLabels:
+      {{- include "accounts.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      annotations:
+        checksum/frontend-config: {{ toYaml .Values.frontend.config | sha256sum }}
+        checksum/backend-config: {{ toYaml .Values.backend.config | sha256sum }}
+        checksum/secrets: {{ toYaml .Values.backend.secrets | sha256sum }}
+      {{- range $k, $v := .Values.podAnnotations }}
+        {{ $k }}: {{ $v | squote }}
+      {{- end }}
+      labels:
+        {{- include "accounts.selectorLabels" . | nindent 8 }}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      containers:
+        - name: frontend
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.frontend.image.repository }}:{{ .Values.frontend.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.frontend.image.pullPolicy }}
+          envFrom:
+            - configMapRef:
+                name: {{ include "accounts.fullname" . }}-frontend
+          ports:
+            - name: http-frontend
+              containerPort: 80
+              protocol: TCP
+          livenessProbe:
+            httpGet:
+              path: /
+              port: http-frontend
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+        - name: backend
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.backend.image.repository }}:{{ .Values.backend.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.backend.image.pullPolicy }}
+          envFrom:
+            - configMapRef:
+                name: {{ include "accounts.fullname" . }}-backend
+            - secretRef:
+                name: {{ include "accounts.fullname" . }}
+          env:
+            - name: SERVER_PORT
+              value: '81'
+            - name: BASE_PATH
+              value: /api
+          ports:
+            - name: http-backend
+              containerPort: 81
+              protocol: TCP
+          livenessProbe:
+            httpGet:
+              path: /api/health
+              port: http-backend
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
