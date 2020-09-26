@@ -4,7 +4,6 @@
       <img src="../../public/nat.svg" alt="Netsoc Logo" />
       <div class="description">
         <h3>Netsoc Membership</h3>
-        <h5>€2.00</h5>
       </div>
     </div>
     <button v-on:click="createSession" id="checkout-button">Renew Membership</button>
