@@ -308,11 +308,11 @@ export default {
 }
 
 .edit-button {
-  background-color: rgb(0, 123, 255);
+  background-color: rgb(151, 180, 210);
 }
 
 .submit-button {
-  background-color: orange;
+  background-color: #ffb52c;
 }
 
 .submit-button:disabled {
@@ -320,10 +320,10 @@ export default {
 }
 
 .log-out {
-  background-color: red;
+  background-color: #c41818de;
 }
 
 .renew-button {
-  background-color: rgba(165, 65, 42, 0.912);
+  background-color: rgba(165, 65, 42, 0.679);
 }
 </style>
