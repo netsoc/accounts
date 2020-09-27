@@ -184,8 +184,10 @@ export default {
     expiryDateString: function () {
       let tokenDate = new Date(
         JSON.parse(atob(this.jwt.split(".")[1]))["exp"] * 1000
-      )
-      return tokenDate.getTime() <= new Date("2000-01-01T00:00:00Z").getTime()? 'Never Renewed' : tokenDate.toDateString();
+      );
+      return tokenDate.getTime() <= new Date("2000-01-01T00:00:00Z").getTime()
+        ? "Never Renewed"
+        : tokenDate.toDateString();
     },
     isExpired: function () {
       let renewedDate = new Date(this.user.renewed);
@@ -317,6 +319,7 @@ export default {
 
 .submit-button:disabled {
   background-color: rgb(255, 223, 165);
+  cursor: not-allowed;
 }
 
 .log-out {
