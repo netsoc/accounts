@@ -3,7 +3,7 @@
     <p class="what-we-do">
       {{ BLURB_TEXT }}
     </p>
-    <form>
+    <form @submit.prevent>
       <div class="input-heading">Username:</div>
       <input
         class="input-field"
@@ -208,8 +208,8 @@ export default {
         .then(() => {
           this.response_pending = false;
           this.response_message =
-            "Account created, please verify your email before logging in";
-          setTimeout(() => this.$router.push({ name: "Login" }), 1500);
+            "Your account has been created, please click the link sent to you by email to verify your email (check spam!)";
+          setTimeout(() => this.$router.push({ name: "Login" }), 2000);
         })
         .catch((error) => {
           this.response_pending = false;

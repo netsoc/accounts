@@ -19,7 +19,7 @@ COPY --from=builder /opt/accounts/dist/ /srv/accounts/
 
 ENV IAM_BASE_URL=http://localhost:8080/v1 \
     IAM_LOGIN_URL=/users/\${username}/login \
-    IAM_VERIFY_URL=/users/self/login \
+    IAM_VERIFY_URL=/users/\${username}/login \
     IAM_CREATE_ACCOUNT_URL=/users \
     IAM_GET_USER_DATA_URL=/users/self \
     IAM_UPDATE_USER_DATA_URL=/users/self

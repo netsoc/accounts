@@ -23,7 +23,7 @@ export default {
       const axios = require("axios").default;
       axios
         .patch(
-          URL,
+          URL.replace("${username}", "self"),
           {},
           {
             headers: {

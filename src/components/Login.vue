@@ -3,7 +3,7 @@
     <p class="what-we-do">
       {{ BLURB_TEXT }}
     </p>
-    <form>
+    <form @submit.prevent>
       <div class="input-heading">Username:</div>
       <input class="input-field" v-model="username" type="text" />
       <span class="input-error">{{ no_username_str }}</span>
@@ -36,7 +36,13 @@
       Stuck? Email
       <a v-bind:href="`mailto:${EMAIL}`">{{ EMAIL }}</a>
     </div>
-    <div>{{ response_message }}</div>
+    <div v-show="info_message">
+      <p>{{ info_message }}</p>
+      <p>
+        Signed up but haven't received your verification email after a while?
+        Click <a href="#" @click="resendVerification">here</a> to re-send it.
+      </p>
+    </div>
   </div>
 </template>
 
@@ -53,7 +59,7 @@ export default {
       no_username: false,
       no_password: false,
       response_pending: false,
-      response_message: "",
+      info_message: "",
     };
   },
   computed: {
@@ -99,9 +105,9 @@ export default {
           console.log(error);
           this.response_pending = false;
           if (!error.response) {
-            this.response_message = "Could not contact the IAM service.";
+            this.info_message = "Could not contact the IAM service.";
           } else {
-            this.response_message = `Error: ${error.response.data.message}`;
+            this.info_message = `Error: ${error.response.data.message}`;
           }
         });
 
@@ -109,6 +115,32 @@ export default {
     },
     createAccount() {
       this.$router.push({ name: "Sign Up" });
+    },
+    resendVerification() {
+      const axios = require("axios").default;
+
+      // eslint-disable-next-line
+      const URL = IAM_VERIFY_URL;
+
+      axios
+        .patch(
+          URL.replace("${username}", this.username),
+          null,
+          {
+            headers: {
+              Accept: "text/html",
+            },
+          }
+        )
+        .then(() => {
+          this.response_pending = false;
+          this.info_message = "Verification email resent (check spam!)";
+        })
+        .catch((error) => {
+          this.response_pending = false;
+          this.info_message = `Error: ${error.response.data.message}`;
+        });
+      this.response_pending = true;
     },
   },
   beforeMount() {

@@ -217,9 +217,7 @@ export default {
         .catch((error) => {
           this.failed_to_get_user = true;
           this.account_error_response = error.response.data.message;
-          setTimeout(() => {
-            tokenFn.emitToken("").bind(this);
-          }, 1000);
+          setTimeout(this.logout, 2000);
         });
     },
     updateUserData() {
