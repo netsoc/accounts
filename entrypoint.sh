@@ -16,6 +16,11 @@ const PAYMENT_CREATE_SESSION_URL = PAYMENT_BASE_URL + '$PAYMENT_CREATE_SESSION_U
 
 // Stripe
 const STRIPE_PUBLIC_KEY = '$STRIPE_PUBLIC_KEY';
+
+// Website
+const SUPPORT_EMAIL = '$SUPPORT_EMAIL';
+const MAIN_WEBSITE_URL = '$MAIN_WEBSITE_URL';
+const BLURB = '$BLURB';
 EOF
 
 exec /docker-entrypoint.sh "$@"
