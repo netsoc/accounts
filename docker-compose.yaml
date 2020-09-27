@@ -48,7 +48,7 @@ services:
       - 8085:8085
 
   iam:
-    image: ghcr.io/netsoc/iamd:0.1.3
+    image: ghcr.io/netsoc/iamd:0.1.8
     entrypoint:
       - sh
       - '-c'
