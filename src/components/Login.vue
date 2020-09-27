@@ -36,8 +36,8 @@
       Stuck? Email
       <a v-bind:href="`mailto:${EMAIL}`">{{ EMAIL }}</a>
     </div>
-    <div v-show="info_message">
-      <p>{{ info_message }}</p>
+    <div class="error-responses-container" v-show="info_message">
+      <p class="response-error">{{ info_message }}</p>
       <p>
         Signed up but haven't received your verification email after a while?
         Click <a href="#" @click="resendVerification">here</a> to re-send it.
@@ -123,15 +123,11 @@ export default {
       const URL = IAM_VERIFY_URL;
 
       axios
-        .patch(
-          URL.replace("${username}", this.username),
-          null,
-          {
-            headers: {
-              Accept: "text/html",
-            },
-          }
-        )
+        .patch(URL.replace("${username}", this.username), null, {
+          headers: {
+            Accept: "text/html",
+          },
+        })
         .then(() => {
           this.response_pending = false;
           this.info_message = "Verification email resent (check spam!)";
@@ -235,5 +231,13 @@ export default {
   max-width: 18rem;
   padding-left: 0.7rem;
   color: #4f4f4f;
+}
+
+.error-responses-container {
+  max-width: 18rem;
+}
+
+.response-error {
+  color: red;
 }
 </style>
