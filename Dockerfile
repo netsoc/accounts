@@ -29,6 +29,11 @@ ENV PAYMENT_BASE_URL=http://localhost:4242 \
 
 ENV STRIPE_PUBLIC_KEY=
 
+ENV SUPPORT_EMAIL=support@netsoc.ie \
+    MAIN_WEBSITE_URL=http://localhost:4000/services/ \
+    BLURB=We provide free web hosting and file storage on our servers, tech talks and tutorials for all skill levels. Learn how to build your own webpage and host it on our servers! Find out more by clicking on our logo above!
+
+
 COPY entrypoint.sh /accounts-entrypoint.sh
 ENTRYPOINT ["/accounts-entrypoint.sh"]
 CMD ["nginx", "-g", "daemon off;"]

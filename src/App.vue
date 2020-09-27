@@ -2,12 +2,13 @@
   <div id="app">
     <div id="app-container">
       <div id="app-wrapper">
-        <img
-          src="@/assets/netsoc-logo.svg"
-          alt="Netsoc Logo"
-          id="netsoc-logo"
-          v-on:click="toLogin"
-        />
+        <a v-bind:href="WEB_URL">
+          <img
+            src="@/assets/netsoc-logo.svg"
+            alt="Netsoc Logo"
+            id="netsoc-logo"
+          />
+        </a>
         <router-view
           v-on:tokenUpdate="login"
           v-on:userID="updateUID"
@@ -38,6 +39,13 @@ export default {
       uid: "",
     };
   },
+  computed: {
+    WEB_URL() {
+      // eslint-disable-next-line
+      const url = MAIN_WEBSITE_URL;
+      return url;
+    }
+  },
   methods: {
     login(token) {
       this.jwt = token;
@@ -45,12 +53,6 @@ export default {
     },
     updateUID(uid) {
       this.uid = uid;
-    },
-    toLogin() {
-      let currentName = this.$router.history.current?.name;
-      if (currentName !== "Login" && currentName !== "Account" && currentName !== "Sign Up") {
-        this.$router.push({ name: "Login" });
-      }
     },
   },
   beforeMount() {
@@ -84,11 +86,18 @@ export default {
 
 #netsoc-logo {
   max-height: 5rem;
-  padding-bottom: 1rem;
+  margin-bottom: 0.2rem;
   max-width: 100%;
+  padding: 0.5rem
+}
+
+#netsoc-logo:hover {
+  box-shadow: 0rem 0rem 0.4rem rgb(218, 218, 218);
+  border-radius: 2rem;
 }
 
 #app-wrapper {
   padding: 3rem;
+  padding-top: 2rem;
 }
 </style>

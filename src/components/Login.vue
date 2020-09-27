@@ -1,5 +1,8 @@
 <template>
   <div>
+    <p class="what-we-do">
+      {{ BLURB_TEXT }}
+    </p>
     <form>
       <div class="input-heading">Username:</div>
       <input class="input-field" v-model="username" type="text" />
@@ -12,7 +15,14 @@
         <div></div>
         <div></div>
       </div>
-      <button type="submit" class="action-button log-in" v-else v-on:click="login">Login</button>
+      <button
+        type="submit"
+        class="action-button log-in"
+        v-else
+        v-on:click="login"
+      >
+        Login
+      </button>
     </form>
     <div>or</div>
     <button class="action-button sign-up" v-on:click="createAccount">
@@ -21,6 +31,10 @@
     <div class="reset-link">
       Forgot your password?
       <router-link to="resetPassword"> Reset it here. </router-link>
+    </div>
+    <div class="support-link">
+      Stuck? Email
+      <a v-bind:href="`mailto:${EMAIL}`">{{ EMAIL }}</a>
     </div>
     <div>{{ response_message }}</div>
   </div>
@@ -43,11 +57,21 @@ export default {
     };
   },
   computed: {
-    no_username_str: function () {
+    no_username_str() {
       return this.no_username ? "Please enter your username" : "";
     },
-    no_password_str: function () {
+    no_password_str() {
       return this.no_password ? "Please enter your password" : "";
+    },
+    EMAIL() {
+      // eslint-disable-next-line
+      const email = SUPPORT_EMAIL;
+      return email;
+    },
+    BLURB_TEXT() {
+      // eslint-disable-next-line
+      const blurb_text = BLURB;
+      return blurb_text;
     },
   },
   methods: {
@@ -169,5 +193,15 @@ export default {
 
 .reset-link {
   padding-top: 1.5rem;
+}
+
+.support-link {
+  padding-top: 0.4rem;
+}
+
+.what-we-do {
+  max-width: 18rem;
+  padding-left: 0.7rem;
+  color: #4f4f4f;
 }
 </style>

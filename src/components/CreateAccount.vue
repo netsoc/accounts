@@ -1,5 +1,8 @@
 <template>
   <div>
+    <p class="what-we-do">
+      {{ BLURB_TEXT }}
+    </p>
     <form>
       <div class="input-heading">Username:</div>
       <input
@@ -79,6 +82,10 @@
       Existing user?
       <router-link to="/">Login here instead.</router-link>
     </div>
+    <div class="support-link">
+      Stuck? Email
+      <a v-bind:href="`mailto:${EMAIL}`">{{ EMAIL }}</a>
+    </div>
     <div class="input-error server-error-response">{{ response_message }}</div>
   </div>
 </template>
@@ -103,7 +110,8 @@ export default {
   },
   computed: {
     usernameHint() {
-      return !userFn.isValidUsername(this.username) && this.hintEnable(this.firstname)
+      return !userFn.isValidUsername(this.username) &&
+        this.hintEnable(this.firstname)
         ? "Username must be between 0 and 256 characters."
         : "";
     },
@@ -113,20 +121,25 @@ export default {
         : "";
     },
     lastNameHint() {
-      return !this.lastname?.length > 0 && this.hintEnable(this.email) ? "Last name required." : "";
+      return !this.lastname?.length > 0 && this.hintEnable(this.email)
+        ? "Last name required."
+        : "";
     },
     emailHint() {
-      return !userFn.isValidEmail(this.email) && this.hintEnable(this.repeat_email)
+      return !userFn.isValidEmail(this.email) &&
+        this.hintEnable(this.repeat_email)
         ? "Please enter an @tcd.ie email address"
         : "";
     },
     emailRepeatHint() {
-      return !userFn.stringsMatch(this.email, this.repeat_email) && this.hintEnable(this.password)
+      return !userFn.stringsMatch(this.email, this.repeat_email) &&
+        this.hintEnable(this.password)
         ? "Emails must match."
         : "";
     },
     passwordHint() {
-      return !userFn.isValidPassword(this.password) && this.hintEnable(this.repeat_password)
+      return !userFn.isValidPassword(this.password) &&
+        this.hintEnable(this.repeat_password)
         ? "Password must be between 8 and 255 characters"
         : "";
     },
@@ -152,6 +165,16 @@ export default {
         !this.password ||
         !this.repeat_password
       );
+    },
+    EMAIL() {
+      // eslint-disable-next-line
+      const email = SUPPORT_EMAIL;
+      return email;
+    },
+    BLURB_TEXT() {
+      // eslint-disable-next-line
+      const blurb_text = BLURB;
+      return blurb_text;
     },
   },
   methods: {
@@ -204,6 +227,12 @@ export default {
 <style>
 .server-error-response {
   max-width: 17rem;
+}
+
+.what-we-do {
+  max-width: 18rem;
+  padding-left: 0.7rem;
+  color: #4f4f4f;
 }
 
 .link-padding {
