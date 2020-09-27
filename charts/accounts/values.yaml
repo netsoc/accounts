@@ -74,6 +74,13 @@ frontend:
 
     STRIPE_PUBLIC_KEY: ''
 
+    SUPPORT_EMAIL: 'support@netsoc.ie'
+    MAIN_WEBSITE_URL: 'https://www.netsoc.ie/services/'
+    BLURB: >
+      We provide free web hosting and file storage on our servers, tech talks
+      and tutorials for all skill levels. Learn how to build your own webpage
+      and host it on our servers! Find out more by clicking on our logo above!
+
 backend:
   image:
     repository: ghcr.io/netsoc/accounts/backend
