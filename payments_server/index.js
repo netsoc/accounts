@@ -71,7 +71,8 @@ app.post(`${basePath}/webhook`, bodyParser.raw({ type: 'application/json' }), (r
 
         updateUser(session);
     }
-    response.status(200);
+
+    response.status(204).end();
 });
 
 const server = app.listen(env.SERVER_PORT, () => console.log(`Running on port ${env.SERVER_PORT}`));
