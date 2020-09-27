@@ -1,7 +1,7 @@
 <template>
   <div>
     <div>
-      <div v-if="failed_to_get_user">
+      <div class="token-failure" v-if="failed_to_get_user">
         Sorry, we couldn't access the details of this account. Error:
         {{ account_error_response }}
       </div>
@@ -217,7 +217,7 @@ export default {
         .catch((error) => {
           this.failed_to_get_user = true;
           this.account_error_response = error.response.data.message;
-          setTimeout(this.logout, 2000);
+          setTimeout(this.logout, 1500);
         });
     },
     updateUserData() {
@@ -293,6 +293,10 @@ export default {
 </script>
 
 <style scoped>
+.token-failure {
+  max-width: 18rem;
+}
+
 .account-input-field {
   width: 75%;
   margin-left: 2.2rem;
