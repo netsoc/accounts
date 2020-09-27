@@ -48,7 +48,7 @@ export default {
     },
     toLogin() {
       let currentName = this.$router.history.current?.name;
-      if (currentName !== "Login" && currentName !== "Account") {
+      if (currentName !== "Login" && currentName !== "Account" && currentName !== "Sign Up") {
         this.$router.push({ name: "Login" });
       }
     },

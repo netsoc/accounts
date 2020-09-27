@@ -1,39 +1,91 @@
 <template>
-  <div id="login_container">
-    <div>
-      <div>Username:</div>
-      <input v-model="username" type="text" />
-      <div>First Name:</div>
-      <input v-model="firstname" type="text" />
-      <div>Last Name:</div>
-      <input v-model="lastname" type="text" />
-      <div>Email (must be @tcd):</div>
-      <input v-model="email" type="text" />
-      <div>Repeat Email:</div>
-      <input v-model="repeat_email" type="text" />
-      <span v-if="email != repeat_email">Emails do not match</span>
-      <div>Password:</div>
-      <input v-model="password" type="password" />
-      <div>Repeat Password:</div>
-      <input v-model="repeat_password" type="password" />
-      <span v-if="password != repeat_password">Passwords do not match</span>
-      <span v-if="password.length < 8">Passwords must be longer than 8 characters</span>
-      <div v-if="response_pending" class="bouncing-loader">
-        <div></div>
-        <div></div>
-        <div></div>
-      </div>
-      <button v-else v-on:click="create_account">Create Account</button>
-      <div>
-        Existing user?
-        <router-link to="/">Login here instead.</router-link>
-      </div>
-      <div>{{response_message}}</div>
+  <div>
+    <form>
+      <div class="input-heading">Username:</div>
+      <input
+        class="input-field"
+        v-bind:class="{ 'input-invalid': !!usernameHint }"
+        v-model="username"
+        type="text"
+        v-bind:title="usernameHint"
+        required
+      />
+      <div class="input-heading">First Name:</div>
+      <input
+        class="input-field"
+        v-bind:class="{ 'input-invalid': !!firstNameHint }"
+        v-model="firstname"
+        type="text"
+        v-bind:title="firstNameHint"
+        required
+      />
+      <div class="input-heading">Last Name:</div>
+      <input
+        class="input-field"
+        v-bind:class="{ 'input-invalid': !!lastNameHint }"
+        v-model="lastname"
+        type="text"
+        v-bind:title="lastNameHint"
+        required
+      />
+      <div class="input-heading">Email (must be @tcd):</div>
+      <input
+        class="input-field"
+        v-bind:class="{ 'input-invalid': !!emailHint }"
+        v-model="email"
+        type="text"
+        required
+      />
+      <div class="input-heading">Repeat Email:</div>
+      <input
+        class="input-field"
+        v-bind:class="{ 'input-invalid': !!emailRepeatHint }"
+        v-model="repeat_email"
+        type="text"
+        required
+      />
+      <div class="input-heading">Password (longer than 8 characters):</div>
+      <input
+        class="input-field"
+        v-bind:class="{ 'input-invalid': !!passwordHint }"
+        v-model="password"
+        type="password"
+        required
+      />
+      <div class="input-heading">Repeat Password:</div>
+      <input
+        class="input-field input-padding"
+        v-bind:class="{ 'input-invalid': !!passwordRepeatHint }"
+        v-model="repeat_password"
+        type="password"
+        required
+      />
+    </form>
+    <div v-if="response_pending" class="bouncing-loader">
+      <div></div>
+      <div></div>
+      <div></div>
     </div>
+    <button
+      type="submit"
+      class="action-button sign-up"
+      v-else
+      v-on:click="create_account"
+      :disabled="buttonDisabled"
+    >
+      Create Account
+    </button>
+    <div class="link-padding">
+      Existing user?
+      <router-link to="/">Login here instead.</router-link>
+    </div>
+    <div class="input-error server-error-response">{{ response_message }}</div>
   </div>
 </template>
 
 <script>
+import * as userFn from "./utils/login";
+
 export default {
   name: "LoginPrompt",
   data() {
@@ -48,6 +100,59 @@ export default {
       response_pending: false,
       response_message: "",
     };
+  },
+  computed: {
+    usernameHint() {
+      return !userFn.isValidUsername(this.username) && this.hintEnable(this.firstname)
+        ? "Username must be between 0 and 256 characters."
+        : "";
+    },
+    firstNameHint() {
+      return !this.firstname?.length > 0 && this.hintEnable(this.lastname)
+        ? "First name required."
+        : "";
+    },
+    lastNameHint() {
+      return !this.lastname?.length > 0 && this.hintEnable(this.email) ? "Last name required." : "";
+    },
+    emailHint() {
+      return !userFn.isValidEmail(this.email) && this.hintEnable(this.repeat_email)
+        ? "Please enter an @tcd.ie email address"
+        : "";
+    },
+    emailRepeatHint() {
+      return !userFn.stringsMatch(this.email, this.repeat_email) && this.hintEnable(this.password)
+        ? "Emails must match."
+        : "";
+    },
+    passwordHint() {
+      return !userFn.isValidPassword(this.password) && this.hintEnable(this.repeat_password)
+        ? "Password must be between 8 and 255 characters"
+        : "";
+    },
+    passwordRepeatHint() {
+      return !userFn.stringsMatch(this.password, this.repeat_password)
+        ? "Passwords must match."
+        : "";
+    },
+    buttonDisabled() {
+      return (
+        !!this.usernameHint ||
+        !!this.firstNameHint ||
+        !!this.lastNameHint ||
+        !!this.emailHint ||
+        !!this.emailRepeatHint ||
+        !!this.passwordHint ||
+        !!this.passwordRepeatHint ||
+        !this.username ||
+        !this.firstname ||
+        !this.lastname ||
+        !this.email ||
+        !this.repeat_email ||
+        !this.password ||
+        !this.repeat_password
+      );
+    },
   },
   methods: {
     create_account() {
@@ -89,41 +194,32 @@ export default {
         });
       this.response_pending = true;
     },
+    hintEnable(input) {
+      return input.length > 0;
+    },
   },
 };
 </script>
 
-<style scoped>
-#login_container {
-  border-radius: 1rem;
+<style>
+.server-error-response {
+  max-width: 17rem;
 }
 
-@keyframes bouncing-loader {
-  to {
-    opacity: 0.1;
-    transform: translate3d(0, -1rem, 0);
-  }
+.link-padding {
+  padding-top: 0.5rem;
+  padding-bottom: 0.6rem;
 }
 
-.bouncing-loader {
-  display: flex;
-  justify-content: center;
+.input-invalid {
+  border: 2px solid rgb(255, 65, 65);
 }
 
-.bouncing-loader > div {
-  width: 1rem;
-  height: 1rem;
-  margin: 3rem 0.2rem;
-  background: #8385aa;
-  border-radius: 50%;
-  animation: bouncing-loader 0.6s infinite alternate;
+.input-padding {
+  margin-bottom: 1rem;
 }
 
-.bouncing-loader > div:nth-child(2) {
-  animation-delay: 0.2s;
-}
-
-.bouncing-loader > div:nth-child(3) {
-  animation-delay: 0.4s;
+.sign-up:disabled {
+  background-color: rgba(119, 170, 247, 0.912);
 }
 </style>

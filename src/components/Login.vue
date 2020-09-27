@@ -147,7 +147,7 @@ export default {
 }
 
 .sign-up {
-  background-color: rgb(0, 102, 255);
+  background-color: rgba(0, 102, 255, 0.912);
 }
 
 .input-field {
