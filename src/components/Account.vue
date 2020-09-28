@@ -103,7 +103,10 @@
       </div>
       <div>
         <span>Expires:</span>
-        <span>{{ expiryDateString }}</span>
+        <span class="expires-comment">{{ expiryDateString }}</span>
+      </div>
+      <div v-if="neverRenewed" class="expires-comment never-renewed">
+        Renew your account below to complete signup
       </div>
       <button
         class="action-button account-button renew-button"
@@ -195,6 +198,9 @@ export default {
     },
     logoutOnResponse: function () {
       return this.edit_password || this.edit_username || this.edit_email;
+    },
+    neverRenewed: function () {
+      return this.expiryDateString === "Never Renewed";
     },
   },
   methods: {
@@ -330,5 +336,18 @@ export default {
 
 .renew-button {
   background-color: rgba(165, 65, 42, 0.679);
+}
+
+.expires-comment {
+  max-width: 11rem;
+  display: inline-flex;
+  overflow-wrap: break-word;
+  text-align: left;
+  padding-left: 0.3rem;
+}
+
+.never-renewed {
+  max-width: 14rem;
+  color: #ff0c00;
 }
 </style>
