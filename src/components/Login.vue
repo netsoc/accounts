@@ -36,6 +36,13 @@
       Stuck? Email
       <a v-bind:href="`mailto:${EMAIL}`">{{ EMAIL }}</a>
     </div>
+    <p class="info migration">
+        If you're an existing user, please have a look at
+        <a target="_blank" href="https://www.netsoc.ie/migration/"
+          >our migration page</a
+        >
+        for information about important changes affecting your account!
+      </p>
     <div class="error-responses-container" v-show="info_message">
       <p class="response-error">{{ info_message }}</p>
       <p>
@@ -148,6 +155,15 @@ export default {
 </script>
 
 <style>
+.info {
+  max-width: 18rem;
+  padding-left: 0.7rem;
+  color: #4f4f4f;
+}
+.migration {
+  color: red;
+}
+
 @keyframes bouncing-loader {
   to {
     opacity: 0.1;
