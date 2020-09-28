@@ -1,6 +1,6 @@
 <template>
   <div>
-    <p class="what-we-do">
+    <p class="info">
       {{ BLURB_TEXT }}
     </p>
     <form @submit.prevent>
@@ -87,6 +87,11 @@
       <a v-bind:href="`mailto:${EMAIL}`">{{ EMAIL }}</a>
     </div>
     <div class="input-error server-error-response">{{ response_message }}</div>
+    <p class="info migration">
+      If you're an existing user, please have a look at
+      <a target="_blank" href="https://www.netsoc.ie/migration/">our migration page</a>
+      for information about important changes affecting your account!
+    </p>
   </div>
 </template>
 
@@ -229,10 +234,13 @@ export default {
   max-width: 17rem;
 }
 
-.what-we-do {
+.info {
   max-width: 18rem;
   padding-left: 0.7rem;
   color: #4f4f4f;
+}
+.migration {
+  color: red;
 }
 
 .link-padding {
