@@ -106,7 +106,7 @@
         <span class="expires-comment">{{ expiryDateString }}</span>
       </div>
       <div v-if="neverRenewed" class="expires-comment never-renewed">
-        Renew your account below to complete signup
+        We have currently paused online payments. Please contact support@netsoc.ie to renew your membership.
       </div>
       <button
         class="action-button account-button renew-button"
@@ -266,8 +266,7 @@ export default {
       return newUserObj;
     },
     toPayments() {
-      this.$emit("userID", this.user.username);
-      this.$router.push({ name: "Renew" });
+      window.location.href = "mailto:support@netsoc.ie";
     },
     logout() {
       tokenFn.emitToken.bind(this)("");
@@ -335,7 +334,8 @@ export default {
 }
 
 .renew-button {
-  background-color: rgba(165, 65, 42, 0.679);
+  background-color: rgb(223, 223, 223);
+  color: grey;
 }
 
 .expires-comment {
@@ -349,5 +349,6 @@ export default {
 .never-renewed {
   max-width: 14rem;
   color: #ff0c00;
+  text-align: center;
 }
 </style>

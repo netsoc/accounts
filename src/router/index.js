@@ -30,12 +30,6 @@ const routes = [
     meta: { title: 'My Account' }
   },
   {
-    path: '/renew',
-    name: 'Renew',
-    component: () => import('@/components/Renew.vue'),
-    meta: { title: 'Renew Membership' }
-  },
-  {
     path: '/resetPassword',
     name: 'Reset Password',
     component: () => import('@/components/RequestReset.vue'),
