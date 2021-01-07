@@ -19,7 +19,6 @@ export default {
     },
   },
   beforeMount() {
-    this.$router.push({ name: "Login" });
     let hasToken = tokenFn.checkForToken.bind(this)();
     if (!hasToken.hasToken) {
       this.$router.push({ name: "Login" });
