@@ -63,5 +63,5 @@ jobs:
       # Pushing to an existing tag doesn't seem to work with buildx :(
       - name: Push images
         run: |
-          docker push "$REPO/frontend"
-          docker push "$REPO/backend"
+          docker push --all-tags "$REPO/frontend"
+          docker push --all-tags "$REPO/backend"
